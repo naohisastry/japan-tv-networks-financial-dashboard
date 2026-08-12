@@ -2,7 +2,7 @@
 
 An interactive, zero-dependency web dashboard analyzing the 10-year financial transformation, revenue composition shifts, and strategic pivots of Japan's 5 major commercial television networks (**Nippon TV HD**, **TV Asahi HD**, **TBS HD**, **TV Tokyo HD**, and **Fuji Media HD**).
 
-![Status](https://img.shields.io/badge/Status-Complete-success) ![Language](https://img.shields.io/badge/Language-English%20%7C%20Japanese-blue) ![Deployment](https://img.shields.io/badge/Deployment-GitHub%20Pages-brightgreen)
+![Status](https://img.shields.io/badge/Status-Complete-success) ![Language](https://img.shields.io/badge/Language-English-blue) ![Deployment](https://img.shields.io/badge/Deployment-GitHub%20Pages-brightgreen)
 
 ---
 
@@ -32,11 +32,10 @@ An interactive, zero-dependency web dashboard analyzing the 10-year financial tr
 ## 🚀 Deployment & Usage
 
 ### 1. View Live on GitHub Pages
-* **English Dashboard (Default)**: `index.html`
-* **Japanese Dashboard**: `index_ja.html`
+* **Live Dashboard**: [https://naohisastry.github.io/japan-tv-networks-financial-dashboard/](https://naohisastry.github.io/japan-tv-networks-financial-dashboard/)
 
 ### 2. Local Usage
-No web server required. Simply double-click `index.html` or `index_ja.html` to open directly in Google Chrome, Microsoft Edge, or Safari (`file:///...`).
+No web server required. Simply double-click `index.html` to open directly in Google Chrome, Microsoft Edge, or Safari (`file:///...`).
 
 ---
 
