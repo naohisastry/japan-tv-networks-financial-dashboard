@@ -1,0 +1,3048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Japan 5 Commercial TV Networks Financial Analysis Dashboard</title>
+  
+  <!-- Debug Console Handler -->
+  <script>
+    window.addEventListener('error', function(e) {
+      var errorDiv = document.getElementById('debug-error-console');
+      if (!errorDiv) {
+        errorDiv = document.createElement('div');
+        errorDiv.id = 'debug-error-console';
+        errorDiv.style.position = 'fixed';
+        errorDiv.style.bottom = '20px';
+        errorDiv.style.left = '20px';
+        errorDiv.style.right = '20px';
+        errorDiv.style.padding = '20px';
+        errorDiv.style.background = 'rgba(239, 68, 68, 0.95)';
+        errorDiv.style.color = '#fff';
+        errorDiv.style.fontFamily = 'monospace';
+        errorDiv.style.fontSize = '14px';
+        errorDiv.style.zIndex = '99999';
+        errorDiv.style.borderRadius = '8px';
+        errorDiv.style.boxShadow = '0 10px 25px rgba(0,0,0,0.5)';
+        errorDiv.style.maxHeight = '250px';
+        errorDiv.style.overflowY = 'auto';
+        errorDiv.style.border = '2px solid #ff8888';
+        
+        var header = document.createElement('h3');
+        header.innerText = '🚨 Render Error Detected (Debug Console)';
+        header.style.marginTop = '0';
+        header.style.marginBottom = '10px';
+        header.style.color = '#fff';
+        errorDiv.appendChild(header);
+        
+        document.body.appendChild(errorDiv);
+      }
+      
+      var msg = document.createElement('div');
+      msg.style.marginBottom = '8px';
+      
+      if (e.target && (e.target.tagName === 'SCRIPT' || e.target.tagName === 'LINK')) {
+        msg.innerHTML = '<strong>Resource Load Error:</strong> Failed to load ' + e.target.tagName + ' from: <br><span style="color: #ffcccc;">' + (e.target.src || e.target.href) + '</span>';
+      } else {
+        msg.innerHTML = '<strong>Error:</strong> ' + e.message + '<br><strong>File:</strong> ' + e.filename + ':' + e.lineno + ':' + e.colno;
+        if (e.error && e.error.stack) {
+          msg.innerHTML += '<pre style="margin-top: 5px; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 4px; overflow-x: auto; font-size: 12px; white-space: pre-wrap;">' + e.error.stack + '</pre>';
+        }
+      }
+      errorDiv.appendChild(msg);
+    }, true);
+  </script>
+
+  <!-- Premium CSS -->
+  <style>
+/* ==========================================================================
+   テレビ局売上構成ダッシュボード プレミアムダークスタイルシート (Obsidian Theme)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+JP:wght@300;400;500;700;900&family=Outfit:wght@300;400;500;600;700;800&display=swap');
+
+/* --- 1. デザインシステムトークン (CSSカスタム変数) --- */
+:root {
+  /* 背景・カードカラー */
+  --bg-primary: #080B11;
+  --bg-secondary: #0E131F;
+  --card-bg: rgba(18, 24, 38, 0.65);
+  --card-border: rgba(255, 255, 255, 0.08);
+  --card-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.5);
+  
+  /* テキストカラー */
+  --text-primary: #F3F4F6;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  
+  /* アクセントカラー */
+  --color-primary: #3B82F6;       /* ロイヤルブルー */
+  --color-primary-glow: rgba(59, 130, 246, 0.15);
+  --color-success: #10B981;       /* エメラルド */
+  --color-danger: #EF4444;        /* レッド */
+  --color-warning: #F59E0B;       /* アンバー */
+  
+  /* 凡例・グラフカラー (ユーザー提供画像に100%適合) */
+  --color-tv: #1E3D7C;            /* テレビ放送：ネイビー・ダークブルー */
+  --color-digital: #2E5CB8;       /* デジタル広告：明るめネイビーブルー */
+  --color-content: #2A9D8F;       /* コンテンツ・配信：エメラルド・ティール */
+  --color-merch: #38BDF8;         /* 物販・ライフスタイル：スカイブルー */
+  --color-wellness: #10B981;      /* ウェルネス：エメラルド・グリーン */
+  --color-realestate: #F59E0B;    /* 不動産・その他：オレンジ・イエロー */
+  --color-other: #6B7280;         /* その他：グレー */
+  --color-internal: #9CA3AF;      /* 内部消去：ライトグレー */
+}
+
+/* --- 2. 基本リセット ＆ タイポグラフィ --- */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(circle at 10% 20%, rgba(59, 130, 246, 0.05) 0%, transparent 40%),
+    radial-gradient(circle at 90% 80%, rgba(139, 92, 246, 0.05) 0%, transparent 40%);
+  background-attachment: fixed;
+}
+
+/* スクロールバーのカスタマイズ */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: #1F2937;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #374151;
+}
+
+/* --- 3. レイアウト構造 --- */
+.app-container {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 24px 32px;
+}
+
+/* ヘッダーエリア */
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 32px;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 20px;
+}
+
+.title-group h1 {
+  font-family: 'Outfit', 'Noto Sans JP', sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  background: linear-gradient(135deg, #FFFFFF 30%, #93C5FD 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.title-group p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* タブ選択メニュー */
+.tab-navigation {
+  display: flex;
+  background: rgba(17, 24, 39, 0.8);
+  border: 1px solid var(--card-border);
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.tab-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+}
+
+.tab-btn.active {
+  background: #1D4ED8;
+  color: #FFFFFF;
+  box-shadow: 0 4px 12px rgba(29, 78, 216, 0.3);
+}
+
+/* --- 4. ガラスモルフィズムカード ＆ グリッド --- */
+.grid-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+.glass-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.glass-card:hover {
+  box-shadow: 0 20px 38px -10px rgba(0, 0, 0, 0.7), 0 0 1px 1px rgba(255, 255, 255, 0.1) inset;
+}
+
+.glass-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-left: 4px solid var(--color-primary);
+  padding-left: 10px;
+}
+
+/* --- 5. コントロールパネル (左側) --- */
+.control-group {
+  margin-bottom: 24px;
+}
+
+.control-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* セレクタスタイリング */
+.station-selector {
+  width: 100%;
+  background: #111827;
+  border: 1px solid var(--card-border);
+  color: var(--text-primary);
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.station-selector:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.25);
+}
+
+/* トグレスイッチ (金額 vs 構成比) */
+.toggle-switch-container {
+  display: flex;
+  background: #111827;
+  border: 1px solid var(--card-border);
+  border-radius: 10px;
+  padding: 4px;
+}
+
+.toggle-switch-btn {
+  flex: 1;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.toggle-switch-btn.active {
+  background: #2563EB;
+  color: #FFFFFF;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+}
+
+/* --- 6. 凡例表示パネル --- */
+.legend-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.legend-color-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+/* 各凡例色 */
+.dot-tv { background-color: var(--color-tv); }
+.dot-digital {
+  background: repeating-linear-gradient(
+    45deg,
+    var(--color-tv),
+    var(--color-tv) 6px,
+    #FFFFFF 6px,
+    #FFFFFF 12px
+  );
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+.dot-content { background-color: var(--color-content); }
+.dot-merch { background-color: var(--color-merch); }
+.dot-wellness { background-color: var(--color-wellness); }
+.dot-realestate { background-color: var(--color-realestate); }
+.dot-other { background-color: var(--color-other); }
+.dot-internal { background-color: var(--color-internal); }
+
+/* --- 7. 分析インサイトパネル (右側) --- */
+.tab-content {
+  display: none;
+  animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+
+/* テレビ局プロファイルインサイト */
+.station-insight-box {
+  margin-top: 24px;
+}
+
+.station-badge {
+  display: inline-block;
+  background: var(--color-primary-glow);
+  color: #60A5FA;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 700;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  text-transform: uppercase;
+}
+
+.insight-badge-row {
+  margin-bottom: 16px;
+}
+
+.insight-split-container {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.insight-left-pane {
+  background: rgba(30, 41, 59, 0.15);
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 16px 24px 16px 16px;
+  border-radius: 8px 0 0 8px;
+}
+
+.insight-right-pane {
+  background: rgba(245, 158, 11, 0.03);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.insight-bottom-pane {
+  background: rgba(245, 158, 11, 0.03);
+  border: 1px solid rgba(245, 158, 11, 0.15);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.pane-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 800;
+  color: #FFFFFF;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+  letter-spacing: 0.5px;
+}
+
+.pane-header svg {
+  width: 14px;
+  height: 14px;
+}
+
+.pane-header.highlight {
+  color: #FFFFFF;
+}
+
+.station-insight-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+
+.station-insight-desc {
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.station-question-text {
+  font-size: 15px;
+  color: #FFFFFF;
+  line-height: 1.6;
+  font-weight: 500;
+  white-space: pre-wrap;
+}
+
+/* --- 8. 各局比較ビュー (意図②) --- */
+.comparison-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.mini-profile-card {
+  background: rgba(17, 24, 39, 0.5);
+  border: 1px solid var(--card-border);
+  border-radius: 12px;
+  padding: 16px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.mini-profile-card:hover {
+  border-color: var(--color-primary);
+  background: rgba(17, 24, 39, 0.8);
+}
+
+.mini-card-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #FFFFFF;
+  margin-bottom: 6px;
+}
+
+.mini-card-code {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+}
+
+.mini-card-tag {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-weight: 600;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.mini-card-value {
+  font-family: 'Outfit', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #60A5FA;
+}
+
+.mini-card-label {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+/* --- 9. クレジット表記 --- */
+.app-footer {
+  text-align: center;
+  margin-top: 48px;
+  padding-top: 16px;
+  border-top: 1px solid var(--card-border);
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+/* --- 10. 画像保存ボタン ＆ タイトルコンテナ --- */
+.glass-card-title-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  border-bottom: 1px solid var(--card-border);
+  padding-bottom: 12px;
+}
+
+.glass-card-title-container .glass-card-title {
+  margin-bottom: 0 !important;
+  border-bottom: none !important;
+  padding-bottom: 0 !important;
+}
+
+.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(59, 130, 246, 0.12);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #60A5FA;
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: inherit;
+  outline: none;
+}
+
+.download-btn:hover {
+  background: rgba(59, 130, 246, 0.22);
+  border-color: rgba(59, 130, 246, 0.45);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
+.download-btn i {
+  width: 14px;
+  height: 14px;
+}
+
+</style>
+  <!-- ApexCharts CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body>
+
+  <div class="app-container">
+    
+    <!-- 1. Application Header -->
+    <header class="app-header">
+      <div class="title-group">
+        <h1>Japan 5 Commercial TV Networks Financial Analysis Dashboard</h1>
+        <p>Analysis of TV Station Revenue Structures & Shifts over 10 Years based on Financial Results (FY2015–FY2026)</p>
+      </div>
+      
+      <!-- Main Tab Navigation -->
+      <nav class="tab-navigation">
+        <button class="tab-btn active" onclick="switchTab('tab-trends')">
+          <i data-lucide="bar-chart-3"></i> Revenue Trends over Time
+        </button>
+        <button class="tab-btn" onclick="switchTab('tab-comparison')">
+          <i data-lucide="layout-grid"></i> Network Profiles & Comparison
+        </button>
+      </nav>
+    </header>
+
+    <!-- =======================================================================
+         Tab 1: Revenue Trends over Time (Stacked Bar Chart & 100% Toggle)
+         ======================================================================= -->
+    <div id="tab-trends" class="tab-content active">
+      <div class="grid-layout">
+        
+        <!-- Left Control Panel -->
+        <aside class="glass-card">
+          <div class="glass-card-title">
+            <i data-lucide="sliders"></i> Chart Controls
+          </div>
+
+          <!-- Control 1: Network Selection -->
+          <div class="control-group">
+            <label class="control-label" for="station-select">Select TV Network</label>
+            <select id="station-select" class="station-selector" onchange="onStationChange()">
+              <option value="Total 5 Networks" selected>Total 5 Networks (All Commercial Networks)</option>
+              <option value="Nippon TV HD">Nippon TV HD (9404)</option>
+              <option value="TV Asahi HD">TV Asahi HD (9409)</option>
+              <option value="TBS HD">TBS HD (9401)</option>
+              <option value="TV Tokyo HD">TV Tokyo HD (9413)</option>
+              <option value="Fuji Media HD">Fuji Media HD (9405)</option>
+            </select>
+          </div>
+          
+          <!-- Control 2: Display Mode Switch -->
+          <div class="control-group">
+            <label class="control-label">Chart Display Mode</label>
+            <div class="toggle-switch-container">
+              <button id="toggle-value" class="toggle-switch-btn active" onclick="setGraphMode('value')">
+                Amount (JPY)
+              </button>
+              <button id="toggle-percent" class="toggle-switch-btn" onclick="setGraphMode('percent')">
+                Share (%)
+              </button>
+            </div>
+          </div>
+          
+          <!-- Legend Card -->
+          <div class="control-group" style="margin-top: 32px; border-top: 1px solid var(--card-border); padding-top: 20px;">
+            <label class="control-label">Revenue Category Legend</label>
+            <div class="legend-grid">
+              <div class="legend-item">
+                <span class="legend-color-dot dot-tv"></span>
+                <span>TV Broadcasting > Terrestrial, BS, CS, etc.</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color-dot dot-digital"></span>
+                <span>TV Broadcasting > Digital Ads</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color-dot dot-content"></span>
+                <span>Content, Streaming, Production & IP</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color-dot dot-merch"></span>
+                <span>Merchandising & Lifestyle</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color-dot dot-wellness"></span>
+                <span>Wellness</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color-dot dot-realestate"></span>
+                <span>Real Estate & Others</span>
+              </div>
+              <div class="legend-item">
+                <span class="legend-color-dot dot-other"></span>
+                <span>Others</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Main Chart Panel -->
+        <main class="dashboard-grid">
+          <!-- Stacked Bar Chart Area -->
+          <div class="glass-card" style="grid-column: span 2;">
+            <div class="glass-card-title-container">
+              <div class="glass-card-title" id="chart-main-title">
+                <i data-lucide="bar-chart-horizontal"></i> Total 5 Networks: Revenue Breakdown Trends (FY2015–FY2026)
+              </div>
+              <button class="download-btn" onclick="downloadChartImage('trend', 'Revenue_Trends')">
+                <i data-lucide="download"></i> Save as Image
+              </button>
+            </div>
+            <!-- ApexCharts Container -->
+            <div id="main-trend-chart" style="min-height: 480px; width: 100%;"></div>
+          </div>
+        </main>
+        
+      </div>
+
+      <!-- Insight Box (Full Width) -->
+      <div class="glass-card station-insight-box">
+        <div class="insight-badge-row">
+          <span class="station-badge" id="insight-station-badge">Total 5 Networks</span>
+        </div>
+        
+        <div class="insight-split-container">
+          <!-- Left Pane: Insights (Facts & Analysis) -->
+          <div class="insight-left-pane">
+            <div class="pane-header">
+              <i data-lucide="eye"></i>
+              <span>Insight Analysis & Facts</span>
+            </div>
+            <h3 class="station-insight-title" id="insight-title">Tectonic Shift in Media: Terrestrial Ad Contraction & Structural Pivot to Content</h3>
+            <p class="station-insight-desc" id="insight-desc">
+              Loading insight details...
+            </p>
+          </div>
+          
+          <!-- Right Pane: Key Strategic Challenges -->
+          <div class="insight-right-pane" id="insight-question-container">
+            <div class="pane-header highlight">
+              <i data-lucide="help-circle"></i>
+              <span>Key Strategic Challenges</span>
+            </div>
+            <p class="station-question-text" id="insight-question">
+              Loading challenges...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- =======================================================================
+         Tab 2: Network Profiles & Share Comparison
+         ======================================================================= -->
+    <div id="tab-comparison" class="tab-content">
+      
+      <!-- Mini Profile Grid -->
+      <section class="comparison-grid">
+        <div class="mini-profile-card">
+          <h3 class="mini-card-name">Nippon TV HD</h3>
+          <span class="mini-card-code">9404 / Net Sales: JPY 484,418M</span>
+          <div class="mini-card-tag">Dominant Terrestrial Share</div>
+          <div class="mini-card-value">51.3%</div>
+          <div class="mini-card-label">Broadcasting Ad Dependency</div>
+        </div>
+        <div class="mini-profile-card">
+          <h3 class="mini-card-name">TV Asahi HD</h3>
+          <span class="mini-card-code">9409 / Net Sales: JPY 339,539M</span>
+          <div class="mini-card-tag">Internet Expansion & AI</div>
+          <div class="mini-card-value">11.7%</div>
+          <div class="mini-card-label">Digital & Streaming Ratio</div>
+        </div>
+        <div class="mini-profile-card">
+          <h3 class="mini-card-name">TBS HD</h3>
+          <span class="mini-card-code">9401 / Net Sales: JPY 424,850M</span>
+          <div class="mini-card-tag">High Diversification (Real Estate & Retail)</div>
+          <div class="mini-card-value">27.6%</div>
+          <div class="mini-card-label">Retail & Real Estate Ratio</div>
+        </div>
+        <div class="mini-profile-card">
+          <h3 class="mini-card-name">TV Tokyo HD</h3>
+          <span class="mini-card-code">9413 / Net Sales: JPY 164,915M</span>
+          <div class="mini-card-tag">Anime & Global Rights Specialization</div>
+          <div class="mini-card-value">26.8%</div>
+          <div class="mini-card-label">Anime & Streaming Ratio</div>
+        </div>
+        <div class="mini-profile-card">
+          <h3 class="mini-card-name">Fuji Media HD</h3>
+          <span class="mini-card-code">9405 / Net Sales: JPY 551,865M</span>
+          <div class="mini-card-tag">Urban Dev & Retail Exceeding TV</div>
+          <div class="mini-card-value">36.7%</div>
+          <div class="mini-card-label">Real Estate & Retail Ratio</div>
+        </div>
+      </section>
+
+      <!-- Side-by-side Share Comparison Chart -->
+      <div class="glass-card">
+        <div class="glass-card-title-container">
+          <div class="glass-card-title">
+            <i data-lucide="columns"></i> 5 Key Networks: Revenue Breakdown Comparison (FY2026)
+          </div>
+          <button class="download-btn" onclick="downloadChartImage('comparison', 'Revenue_Breakdown_Comparison')">
+            <i data-lucide="download"></i> Save as Image
+          </button>
+        </div>
+        <div id="comparison-companies-chart" style="min-height: 400px; width: 100%;"></div>
+      </div>
+
+      <!-- Comparative Insight Box -->
+      <div class="glass-card station-insight-box">
+        <div class="insight-badge-row">
+          <span class="station-badge" style="background: #1D4ED8; color: #FFFFFF; border-color: rgba(96, 165, 250, 0.3);">Insight Analysis</span>
+        </div>
+        
+        <div class="insight-vertical-container">
+          <!-- Top Pane: Insight -->
+          <div class="insight-top-pane" style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
+            <div class="pane-header">
+              <i data-lucide="eye"></i>
+              <span>Insight Analysis & Facts</span>
+            </div>
+            <h3 class="station-insight-title" id="comp-insight-title" style="color: #60A5FA;">What the '5 Networks, 5 Strategies' Era Proves</h3>
+            <p class="station-insight-desc" id="comp-insight-desc" style="color: var(--text-primary); margin-top: 8px;">
+              Loading comparative analysis...
+            </p>
+          </div>
+          
+          <!-- Bottom Pane: Key Strategic Challenges -->
+          <div class="insight-bottom-pane" id="comp-insight-question-container">
+            <div class="pane-header highlight">
+              <i data-lucide="help-circle"></i>
+              <span>Key Strategic Challenges</span>
+            </div>
+            <p class="station-question-text" id="comp-insight-question">
+              Loading challenges...
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Application Footer -->
+    <footer class="app-footer">
+      <p>* Data in this dashboard is compiled based on annual securities reports and financial presentation materials of each company. Segment classifications are aggregated based on custom analytical categories.</p>
+      <p style="margin-top: 8px; font-size: 12px; color: var(--text-secondary);">© 2026 Naohisa Hashimoto’S Update date:2026/06/15</p>
+    </footer>
+
+  </div>
+
+  <!-- Include English Data and Logic -->
+  <script>
+// Automatically generated financial time series data module (FY2015-FY2026)
+const TV_DATA = {
+  "consolidated_summary": [
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2015",
+      "sales": 362497,
+      "operating_expenses": 320115,
+      "operating_profit": 42382,
+      "ordinary_profit": 47810,
+      "net_profit": 27699
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2016",
+      "sales": 414780,
+      "operating_expenses": 361602,
+      "operating_profit": 53178,
+      "ordinary_profit": 58154,
+      "net_profit": 36773
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2017",
+      "sales": 416704,
+      "operating_expenses": 364178,
+      "operating_profit": 52526,
+      "ordinary_profit": 58171,
+      "net_profit": 39116
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2018",
+      "sales": 423663,
+      "operating_expenses": 372699,
+      "operating_profit": 50964,
+      "ordinary_profit": 56864,
+      "net_profit": 37568
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2019",
+      "sales": 424945,
+      "operating_expenses": 375196,
+      "operating_profit": 49749,
+      "ordinary_profit": 55679,
+      "net_profit": 39209
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2020",
+      "sales": 426599,
+      "operating_expenses": 383488,
+      "operating_profit": 43111,
+      "ordinary_profit": 49738,
+      "net_profit": 30141
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2021",
+      "sales": 391335,
+      "operating_expenses": 356809,
+      "operating_profit": 34526,
+      "ordinary_profit": 41525,
+      "net_profit": 24009
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2022",
+      "sales": 406395,
+      "operating_expenses": 347713,
+      "operating_profit": 58682,
+      "ordinary_profit": 67522,
+      "net_profit": 47413
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2023",
+      "sales": 413979,
+      "operating_expenses": 367386,
+      "operating_profit": 46593,
+      "ordinary_profit": 56125,
+      "net_profit": 35384
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2024",
+      "sales": 423523,
+      "operating_expenses": 381646,
+      "operating_profit": 41877,
+      "ordinary_profit": 56128,
+      "net_profit": 39789
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2025",
+      "sales": 461915,
+      "operating_expenses": 406998,
+      "operating_profit": 54917,
+      "ordinary_profit": 65724,
+      "net_profit": 46000
+    },
+    {
+      "station": "Nippon TV HD",
+      "code": "9404",
+      "period": "FY2026",
+      "sales": 484418,
+      "operating_expenses": 415085,
+      "operating_profit": 69332,
+      "ordinary_profit": 82081,
+      "net_profit": 56767
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2015",
+      "sales": 276473,
+      "operating_expenses": 261335,
+      "operating_profit": 15138,
+      "ordinary_profit": 17215,
+      "net_profit": 11488
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2016",
+      "sales": 280779,
+      "operating_expenses": 264209,
+      "operating_profit": 16570,
+      "ordinary_profit": 18509,
+      "net_profit": 11986
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2017",
+      "sales": 295879,
+      "operating_expenses": 278601,
+      "operating_profit": 17278,
+      "ordinary_profit": 21947,
+      "net_profit": 15873
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2018",
+      "sales": 302511,
+      "operating_expenses": 283877,
+      "operating_profit": 18634,
+      "ordinary_profit": 22053,
+      "net_profit": 15332
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2019",
+      "sales": 301744,
+      "operating_expenses": 285580,
+      "operating_profit": 16164,
+      "ordinary_profit": 19097,
+      "net_profit": 12720
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2020",
+      "sales": 293638,
+      "operating_expenses": 281073,
+      "operating_profit": 12565,
+      "ordinary_profit": 32048,
+      "net_profit": 24729
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2021",
+      "sales": 264557,
+      "operating_expenses": 250144,
+      "operating_profit": 14413,
+      "ordinary_profit": 17980,
+      "net_profit": 12613
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2022",
+      "sales": 298276,
+      "operating_expenses": 276845,
+      "operating_profit": 21431,
+      "ordinary_profit": 30467,
+      "net_profit": 21000
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2023",
+      "sales": 304566,
+      "operating_expenses": 290063,
+      "operating_profit": 14503,
+      "ordinary_profit": 23619,
+      "net_profit": 16607
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2024",
+      "sales": 307898,
+      "operating_expenses": 295561,
+      "operating_profit": 12337,
+      "ordinary_profit": 24196,
+      "net_profit": 17138
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2025",
+      "sales": 324056,
+      "operating_expenses": 304352,
+      "operating_profit": 19704,
+      "ordinary_profit": 28533,
+      "net_profit": 25816
+    },
+    {
+      "station": "TV Asahi HD",
+      "code": "9409",
+      "period": "FY2026",
+      "sales": 339487,
+      "operating_expenses": 313306,
+      "operating_profit": 26181,
+      "ordinary_profit": 36572,
+      "net_profit": 29654
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2015",
+      "sales": 347817,
+      "operating_expenses": 332089,
+      "operating_profit": 15728,
+      "ordinary_profit": 17901,
+      "net_profit": 10738
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2016",
+      "sales": 348539,
+      "operating_expenses": 331360,
+      "operating_profit": 17179,
+      "ordinary_profit": 19771,
+      "net_profit": 11904
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2017",
+      "sales": 355363,
+      "operating_expenses": 335485,
+      "operating_profit": 19878,
+      "ordinary_profit": 22238,
+      "net_profit": 16139
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2018",
+      "sales": 361954,
+      "operating_expenses": 343154,
+      "operating_profit": 18800,
+      "ordinary_profit": 22234,
+      "net_profit": 17182
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2019",
+      "sales": 366353,
+      "operating_expenses": 347781,
+      "operating_profit": 18572,
+      "ordinary_profit": 22668,
+      "net_profit": 17232
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2020",
+      "sales": 356796,
+      "operating_expenses": 343693,
+      "operating_profit": 13103,
+      "ordinary_profit": 17184,
+      "net_profit": 3782
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2021",
+      "sales": 325682,
+      "operating_expenses": 314841,
+      "operating_profit": 10841,
+      "ordinary_profit": 15133,
+      "net_profit": 5831
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2022",
+      "sales": 358269,
+      "operating_expenses": 337923,
+      "operating_profit": 20346,
+      "ordinary_profit": 25618,
+      "net_profit": 32085
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2023",
+      "sales": 368130,
+      "operating_expenses": 347348,
+      "operating_profit": 20782,
+      "ordinary_profit": 25752,
+      "net_profit": 54236
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2024",
+      "sales": 394309,
+      "operating_expenses": 379134,
+      "operating_profit": 15175,
+      "ordinary_profit": 24082,
+      "net_profit": 43932
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2025",
+      "sales": 406700,
+      "operating_expenses": 387235,
+      "operating_profit": 19465,
+      "ordinary_profit": 31604,
+      "net_profit": 43939
+    },
+    {
+      "station": "TBS HD",
+      "code": "9401",
+      "period": "FY2026",
+      "sales": 424850,
+      "operating_expenses": 400100,
+      "operating_profit": 24750,
+      "ordinary_profit": 37373,
+      "net_profit": 52228
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2015",
+      "sales": 128667,
+      "operating_expenses": 123666,
+      "operating_profit": 5001,
+      "ordinary_profit": 5431,
+      "net_profit": 3018
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2016",
+      "sales": 136216,
+      "operating_expenses": 129008,
+      "operating_profit": 7208,
+      "ordinary_profit": 7638,
+      "net_profit": 4269
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2017",
+      "sales": 142679,
+      "operating_expenses": 136285,
+      "operating_profit": 6394,
+      "ordinary_profit": 6793,
+      "net_profit": 4215
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2018",
+      "sales": 147103,
+      "operating_expenses": 139673,
+      "operating_profit": 7430,
+      "ordinary_profit": 8001,
+      "net_profit": 5728
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2019",
+      "sales": 149229,
+      "operating_expenses": 143282,
+      "operating_profit": 5947,
+      "ordinary_profit": 5619,
+      "net_profit": 3269
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2020",
+      "sales": 145173,
+      "operating_expenses": 140045,
+      "operating_profit": 5128,
+      "ordinary_profit": 5161,
+      "net_profit": 2836
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2021",
+      "sales": 139084,
+      "operating_expenses": 133856,
+      "operating_profit": 5228,
+      "ordinary_profit": 5340,
+      "net_profit": 3741
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2022",
+      "sales": 148070,
+      "operating_expenses": 139486,
+      "operating_profit": 8584,
+      "ordinary_profit": 9159,
+      "net_profit": 6028
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2023",
+      "sales": 150963,
+      "operating_expenses": 141734,
+      "operating_profit": 9229,
+      "ordinary_profit": 9378,
+      "net_profit": 6460
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2024",
+      "sales": 148587,
+      "operating_expenses": 139751,
+      "operating_profit": 8836,
+      "ordinary_profit": 9599,
+      "net_profit": 6036
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2025",
+      "sales": 155837,
+      "operating_expenses": 148048,
+      "operating_profit": 7789,
+      "ordinary_profit": 8255,
+      "net_profit": 6037
+    },
+    {
+      "station": "TV Tokyo HD",
+      "code": "9413",
+      "period": "FY2026",
+      "sales": 164915,
+      "operating_expenses": 153513,
+      "operating_profit": 11402,
+      "ordinary_profit": 11937,
+      "net_profit": 7700
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2015",
+      "sales": 643313,
+      "operating_expenses": 617685,
+      "operating_profit": 25628,
+      "ordinary_profit": 27998,
+      "net_profit": 12543
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2016",
+      "sales": 640572,
+      "operating_expenses": 616178,
+      "operating_profit": 24394,
+      "ordinary_profit": 26110,
+      "net_profit": 22628
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2017",
+      "sales": 653976,
+      "operating_expenses": 631657,
+      "operating_profit": 22319,
+      "ordinary_profit": 23248,
+      "net_profit": 27393
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2018",
+      "sales": 646536,
+      "operating_expenses": 621278,
+      "operating_profit": 25258,
+      "ordinary_profit": 27914,
+      "net_profit": 24956
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2019",
+      "sales": 669230,
+      "operating_expenses": 634521,
+      "operating_profit": 34709,
+      "ordinary_profit": 38799,
+      "net_profit": 23561
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2020",
+      "sales": 631482,
+      "operating_expenses": 605141,
+      "operating_profit": 26341,
+      "ordinary_profit": 30551,
+      "net_profit": 41249
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2021",
+      "sales": 519941,
+      "operating_expenses": 503667,
+      "operating_profit": 16274,
+      "ordinary_profit": 21399,
+      "net_profit": 10138
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2022",
+      "sales": 525087,
+      "operating_expenses": 491749,
+      "operating_profit": 33338,
+      "ordinary_profit": 39268,
+      "net_profit": 25068
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2023",
+      "sales": 535641,
+      "operating_expenses": 504240,
+      "operating_profit": 31401,
+      "ordinary_profit": 38591,
+      "net_profit": 46618
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2024",
+      "sales": 566443,
+      "operating_expenses": 532924,
+      "operating_profit": 33519,
+      "ordinary_profit": 47801,
+      "net_profit": 34963
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2025",
+      "sales": 550761,
+      "operating_expenses": 532468,
+      "operating_profit": 18293,
+      "ordinary_profit": 25180,
+      "net_profit": -20100
+    },
+    {
+      "station": "Fuji Media HD",
+      "code": "9405",
+      "period": "FY2026",
+      "sales": 551865,
+      "operating_expenses": 560631,
+      "operating_profit": -8766,
+      "ordinary_profit": -2807,
+      "net_profit": 6400
+    }
+  ],
+  "station_details": {
+    "Nippon TV HD": [
+      {
+        "決算期": "FY2015",
+        "タイム": 105400,
+        "スポット": 121000,
+        "BS・CS広告": 11925,
+        "デジタル広告（TVer等）": 1500,
+        "コンテンツ販売（番販・配信権）": 69404,
+        "コンテンツ制作受託": 26001,
+        "物品販売": 25477,
+        "興行収入（映画・イベント・テーマパーク）": 13458,
+        "不動産賃貸": 199,
+        "その他収入": 9568,
+        "その他の収益（顧客契約以外）": 372,
+        "施設利用料（スポーツクラブ）": 17544,
+        "物販・その他": 2793,
+        "不動産賃貸・管理": 3412
+      },
+      {
+        "決算期": "FY2016",
+        "タイム": 104800,
+        "スポット": 120500,
+        "BS・CS広告": 13645,
+        "デジタル広告（TVer等）": 2100,
+        "コンテンツ販売（番販・配信権）": 79414,
+        "コンテンツ制作受託": 29751,
+        "物品販売": 29152,
+        "興行収入（映画・イベント・テーマパーク）": 15399,
+        "不動産賃貸": 228,
+        "その他収入": 10948,
+        "その他の収益（顧客契約以外）": 426,
+        "施設利用料（スポーツクラブ）": 20074,
+        "物販・その他": 3196,
+        "不動産賃貸・管理": 3904
+      },
+      {
+        "決算期": "FY2017",
+        "タイム": 102400,
+        "スポット": 119800,
+        "BS・CS広告": 13709,
+        "デジタル広告（TVer等）": 3000,
+        "コンテンツ販売（番販・配信権）": 79783,
+        "コンテンツ制作受託": 29889,
+        "物品販売": 29287,
+        "興行収入（映画・イベント・テーマパーク）": 15470,
+        "不動産賃貸": 229,
+        "その他収入": 10999,
+        "その他の収益（顧客契約以外）": 428,
+        "施設利用料（スポーツクラブ）": 20167,
+        "物販・その他": 3211,
+        "不動産賃貸・管理": 3922
+      },
+      {
+        "決算期": "FY2018",
+        "タイム": 98200,
+        "スポット": 115200,
+        "BS・CS広告": 13938,
+        "デジタル広告（TVer等）": 3500,
+        "コンテンツ販売（番販・配信権）": 81115,
+        "コンテンツ制作受託": 30389,
+        "物品販売": 29776,
+        "興行収入（映画・イベント・テーマパーク）": 15729,
+        "不動産賃貸": 233,
+        "その他収入": 11183,
+        "その他の収益（顧客契約以外）": 435,
+        "施設利用料（スポーツクラブ）": 20504,
+        "物販・その他": 3264,
+        "不動産賃貸・管理": 3988
+      },
+      {
+        "決算期": "FY2019",
+        "タイム": 95600,
+        "スポット": 112100,
+        "BS・CS広告": 13980,
+        "デジタル広告（TVer等）": 4800,
+        "コンテンツ販売（番販・配信権）": 81361,
+        "コンテンツ制作受託": 30481,
+        "物品販売": 29866,
+        "興行収入（映画・イベント・テーマパーク）": 15776,
+        "不動産賃貸": 234,
+        "その他収入": 11217,
+        "その他の収益（顧客契約以外）": 436,
+        "施設利用料（スポーツクラブ）": 20566,
+        "物販・その他": 3274,
+        "不動産賃貸・管理": 4000
+      },
+      {
+        "決算期": "FY2020",
+        "タイム": 91800,
+        "スポット": 104500,
+        "BS・CS広告": 14034,
+        "デジタル広告（TVer等）": 6199,
+        "コンテンツ販売（番販・配信権）": 81677,
+        "コンテンツ制作受託": 30599,
+        "物品販売": 29983,
+        "興行収入（映画・イベント・テーマパーク）": 7127,
+        "不動産賃貸": 235,
+        "その他収入": 11260,
+        "その他の収益（顧客契約以外）": 438,
+        "施設利用料（スポーツクラブ）": 11355,
+        "物販・その他": 1808,
+        "不動産賃貸・管理": 4015
+      },
+      {
+        "決算期": "FY2021",
+        "タイム": 82100,
+        "スポット": 88200,
+        "BS・CS広告": 12874,
+        "デジタル広告（TVer等）": 8000,
+        "コンテンツ販売（番販・配信権）": 74926,
+        "コンテンツ制作受託": 28070,
+        "物品販売": 27504,
+        "興行収入（映画・イベント・テーマパーク）": 6538,
+        "不動産賃貸": 215,
+        "その他収入": 10329,
+        "その他の収益（顧客契約以外）": 402,
+        "施設利用料（スポーツクラブ）": 10416,
+        "物販・その他": 1658,
+        "不動産賃貸・管理": 3683
+      },
+      {
+        "決算期": "FY2022",
+        "タイム": 84200,
+        "スポット": 92100,
+        "BS・CS広告": 13370,
+        "デジタル広告（TVer等）": 10500,
+        "コンテンツ販売（番販・配信権）": 77809,
+        "コンテンツ制作受託": 29150,
+        "物品販売": 28563,
+        "興行収入（映画・イベント・テーマパーク）": 15088,
+        "不動産賃貸": 223,
+        "その他収入": 10727,
+        "その他の収益（顧客契約以外）": 417,
+        "施設利用料（スポーツクラブ）": 19668,
+        "物販・その他": 3131,
+        "不動産賃貸・管理": 3825
+      },
+      {
+        "決算期": "FY2023",
+        "タイム": 81000,
+        "スポット": 87800,
+        "BS・CS広告": 13619,
+        "デジタル広告（TVer等）": 12800,
+        "コンテンツ販売（番販・配信権）": 79261,
+        "コンテンツ制作受託": 29694,
+        "物品販売": 29096,
+        "興行収入（映画・イベント・テーマパーク）": 15369,
+        "不動産賃貸": 228,
+        "その他収入": 10927,
+        "その他の収益（顧客契約以外）": 425,
+        "施設利用料（スポーツクラブ）": 20035,
+        "物販・その他": 3190,
+        "不動産賃貸・管理": 3896
+      },
+      {
+        "決算期": "FY2024",
+        "タイム": 105152,
+        "スポット": 113874,
+        "BS・CS広告": 13933,
+        "デジタル広告（TVer等）": 8240,
+        "コンテンツ販売（番販・配信権）": 81088,
+        "コンテンツ制作受託": 30379,
+        "物品販売": 29767,
+        "興行収入（映画・イベント・テーマパーク）": 15724,
+        "不動産賃貸": 233,
+        "その他収入": 11179,
+        "その他の収益（顧客契約以外）": 435,
+        "施設利用料（スポーツクラブ）": 20497,
+        "物販・その他": 3263,
+        "不動産賃貸・管理": 3986
+      },
+      {
+        "決算期": "FY2025",
+        "タイム": 105038,
+        "スポット": 116925,
+        "BS・CS広告": 15196,
+        "デジタル広告（TVer等）": 10522,
+        "コンテンツ販売（番販・配信権）": 88439,
+        "コンテンツ制作受託": 33132,
+        "物品販売": 32465,
+        "興行収入（映画・イベント・テーマパーク）": 17149,
+        "不動産賃貸": 254,
+        "その他収入": 12192,
+        "その他の収益（顧客契約以外）": 474,
+        "施設利用料（スポーツクラブ）": 22355,
+        "物販・その他": 3559,
+        "不動産賃貸・管理": 4348
+      },
+      {
+        "決算期": "FY2026",
+        "タイム": 104109,
+        "スポット": 127637,
+        "BS・CS広告": 15937,
+        "デジタル広告（TVer等）": 11890,
+        "コンテンツ販売（番販・配信権）": 92748,
+        "コンテンツ制作受託": 34747,
+        "物品販売": 34047,
+        "興行収入（映画・イベント・テーマパーク）": 17985,
+        "不動産賃貸": 267,
+        "その他収入": 12787,
+        "その他の収益（顧客契約以外）": 498,
+        "施設利用料（スポーツクラブ）": 23445,
+        "物販・その他": 3733,
+        "不動産賃貸・管理": 4560
+      }
+    ],
+    "TV Asahi HD": [
+      {
+        "決算期": "FY2015",
+        "タイム": 85100,
+        "スポット": 95600,
+        "番組販売": 10947,
+        "BS・CS収入": 21098,
+        "その他収入": 18426,
+        "デジタル広告関連収入（TVer等）": 1000,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 847,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 1211,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 15027,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 42756,
+        "不動産賃貸・管理": 2534
+      },
+      {
+        "決算期": "FY2016",
+        "タイム": 84600,
+        "スポット": 94800,
+        "番組販売": 11118,
+        "BS・CS収入": 21426,
+        "その他収入": 18713,
+        "デジタル広告関連収入（TVer等）": 1500,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 1271,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 1817,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 15261,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 43422,
+        "不動産賃貸・管理": 2573
+      },
+      {
+        "決算期": "FY2017",
+        "タイム": 85200,
+        "スポット": 96100,
+        "番組販売": 11716,
+        "BS・CS収入": 22579,
+        "その他収入": 19719,
+        "デジタル広告関連収入（TVer等）": 2000,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 1695,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 2423,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 16081,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 45757,
+        "不動産賃貸・管理": 2712
+      },
+      {
+        "決算期": "FY2018",
+        "タイム": 84100,
+        "スポット": 93200,
+        "番組販売": 11978,
+        "BS・CS収入": 23085,
+        "その他収入": 20161,
+        "デジタル広告関連収入（TVer等）": 2600,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 2204,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 3150,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 16442,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 46783,
+        "不動産賃貸・管理": 2773
+      },
+      {
+        "決算期": "FY2019",
+        "タイム": 82300,
+        "スポット": 90500,
+        "番組販売": 11948,
+        "BS・CS収入": 23026,
+        "その他収入": 20110,
+        "デジタル広告関連収入（TVer等）": 3800,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 3221,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 4604,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 16400,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 46665,
+        "不動産賃貸・管理": 2766
+      },
+      {
+        "決算期": "FY2020",
+        "タイム": 79100,
+        "スポット": 83400,
+        "番組販売": 11627,
+        "BS・CS収入": 22408,
+        "その他収入": 19570,
+        "デジタル広告関連収入（TVer等）": 4500,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 3815,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 5452,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 15959,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 45411,
+        "不動産賃貸・管理": 2691
+      },
+      {
+        "決算期": "FY2021",
+        "タイム": 73200,
+        "スポット": 71500,
+        "番組販売": 10475,
+        "BS・CS収入": 20188,
+        "その他収入": 17632,
+        "デジタル広告関連収入（TVer等）": 5800,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 4917,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 7027,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 14379,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 40914,
+        "不動産賃貸・管理": 2425
+      },
+      {
+        "決算期": "FY2022",
+        "タイム": 78500,
+        "スポット": 80100,
+        "番組販売": 11811,
+        "BS・CS収入": 22762,
+        "その他収入": 19879,
+        "デジタル広告関連収入（TVer等）": 7200,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 6104,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 8724,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 16212,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 46128,
+        "不動産賃貸・管理": 2734
+      },
+      {
+        "決算期": "FY2023",
+        "タイム": 75600,
+        "スポット": 76800,
+        "番組販売": 12060,
+        "BS・CS収入": 23242,
+        "その他収入": 20298,
+        "デジタル広告関連収入（TVer等）": 9100,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 7715,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 11026,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 16553,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 47101,
+        "不動産賃貸・管理": 2791
+      },
+      {
+        "決算期": "FY2024",
+        "タイム": 78744,
+        "スポット": 88149,
+        "番組販売": 12192,
+        "BS・CS収入": 23496,
+        "その他収入": 20520,
+        "デジタル広告関連収入（TVer等）": 9500,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 8054,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 11511,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 16735,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 47616,
+        "不動産賃貸・管理": 2822
+      },
+      {
+        "決算期": "FY2025",
+        "タイム": 79720,
+        "スポット": 94626,
+        "番組販売": 12831,
+        "BS・CS収入": 24729,
+        "その他収入": 21597,
+        "デジタル広告関連収入（TVer等）": 11700,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 9919,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 14176,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 17613,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 50115,
+        "不動産賃貸・管理": 2970
+      },
+      {
+        "決算期": "FY2026",
+        "タイム": 81541,
+        "スポット": 105231,
+        "番組販売": 13443,
+        "BS・CS収入": 25907,
+        "その他収入": 22626,
+        "デジタル広告関連収入（TVer等）": 11795,
+        "TELASA（KDDI共同・240万会員）／コアファン事業": 10000,
+        "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": 14292,
+        "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": 18452,
+        "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": 52502,
+        "不動産賃貸・管理": 3112
+      }
+    ],
+    "TBS HD": [
+      {
+        "決算期": "FY2015",
+        "タイム（TBSテレビ）": 82600,
+        "スポット（TBSテレビ）": 92800,
+        "配信広告（TVer等）": 1200,
+        "有料配信（Paravi/U-NEXT統合等）": 7641,
+        "番組販売・BS等その他": 20786,
+        "事業（イベント・スポーツ等）": 15384,
+        "不動産（TBSテレビ単体内）": 1936,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 54014,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 78367,
+        "ライフスタイル事業 計（内部含む)": 78382,
+        "赤坂エリア不動産・関係会社": 13825
+      },
+      {
+        "決算期": "FY2016",
+        "タイム（TBSテレビ）": 81800,
+        "スポット（TBSテレビ）": 92100,
+        "配信広告（TVer等）": 1800,
+        "有料配信（Paravi/U-NEXT統合等）": 7657,
+        "番組販売・BS等その他": 20829,
+        "事業（イベント・スポーツ等）": 15416,
+        "不動産（TBSテレビ単体内）": 1940,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 54126,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 78530,
+        "ライフスタイル事業 計（内部含む)": 78544,
+        "赤坂エリア不動産・関係会社": 13854
+      },
+      {
+        "決算期": "FY2017",
+        "タイム（TBSテレビ）": 82400,
+        "スポット（TBSテレビ）": 93200,
+        "配信広告（TVer等）": 2400,
+        "有料配信（Paravi/U-NEXT統合等）": 7807,
+        "番組販売・BS等その他": 21237,
+        "事業（イベント・スポーツ等）": 15718,
+        "不動産（TBSテレビ単体内）": 1978,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 55186,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 80067,
+        "ライフスタイル事業 計（内部含む)": 80082,
+        "赤坂エリア不動産・関係会社": 14125
+      },
+      {
+        "決算期": "FY2018",
+        "タイム（TBSテレビ）": 80500,
+        "スポット（TBSテレビ）": 91400,
+        "配信広告（TVer等）": 3100,
+        "有料配信（Paravi/U-NEXT統合等）": 7952,
+        "番組販売・BS等その他": 21631,
+        "事業（イベント・スポーツ等）": 16009,
+        "不動産（TBSテレビ単体内）": 2014,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 56209,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 81552,
+        "ライフスタイル事業 計（内部含む)": 81568,
+        "赤坂エリア不動産・関係会社": 14387
+      },
+      {
+        "決算期": "FY2019",
+        "タイム（TBSテレビ）": 79200,
+        "スポット（TBSテレビ）": 89800,
+        "配信広告（TVer等）": 4500,
+        "有料配信（Paravi/U-NEXT統合等）": 8048,
+        "番組販売・BS等その他": 21894,
+        "事業（イベント・スポーツ等）": 16204,
+        "不動産（TBSテレビ単体内）": 2039,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 56892,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 82543,
+        "ライフスタイル事業 計（内部含む)": 82559,
+        "赤坂エリア不動産・関係会社": 14562
+      },
+      {
+        "決算期": "FY2020",
+        "タイム（TBSテレビ）": 75600,
+        "スポット（TBSテレビ）": 81500,
+        "配信広告（TVer等）": 5800,
+        "有料配信（Paravi/U-NEXT統合等）": 7838,
+        "番組販売・BS等その他": 21322,
+        "事業（イベント・スポーツ等）": 7101,
+        "不動産（TBSテレビ単体内）": 1986,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 55408,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 80390,
+        "ライフスタイル事業 計（内部含む)": 80405,
+        "赤坂エリア不動産・関係会社": 14182
+      },
+      {
+        "決算期": "FY2021",
+        "タイム（TBSテレビ）": 68200,
+        "スポット（TBSテレビ）": 67300,
+        "配信広告（TVer等）": 7100,
+        "有料配信（Paravi/U-NEXT統合等）": 7155,
+        "番組販売・BS等その他": 19463,
+        "事業（イベント・スポーツ等）": 6482,
+        "不動産（TBSテレビ単体内）": 1812,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 50576,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 73380,
+        "ライフスタイル事業 計（内部含む)": 73394,
+        "赤坂エリア不動産・関係会社": 12946
+      },
+      {
+        "決算期": "FY2022",
+        "タイム（TBSテレビ）": 72400,
+        "スポット（TBSテレビ）": 75100,
+        "配信広告（TVer等）": 9500,
+        "有料配信（Paravi/U-NEXT統合等）": 7871,
+        "番組販売・BS等その他": 21410,
+        "事業（イベント・スポーツ等）": 15846,
+        "不動産（TBSテレビ単体内）": 1994,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 55637,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 80722,
+        "ライフスタイル事業 計（内部含む)": 80737,
+        "赤坂エリア不動産・関係会社": 14241
+      },
+      {
+        "決算期": "FY2023",
+        "タイム（TBSテレビ）": 69800,
+        "スポット（TBSテレビ）": 72400,
+        "配信広告（TVer等）": 12400,
+        "有料配信（Paravi/U-NEXT統合等）": 8087,
+        "番組販売・BS等その他": 22000,
+        "事業（イベント・スポーツ等）": 16283,
+        "不動産（TBSテレビ単体内）": 2049,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 57168,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 82944,
+        "ライフスタイル事業 計（内部含む)": 82959,
+        "赤坂エリア不動産・関係会社": 14633
+      },
+      {
+        "決算期": "FY2024",
+        "タイム（TBSテレビ）": 81590,
+        "スポット（TBSテレビ）": 77767,
+        "配信広告（TVer等）": 8240,
+        "有料配信（Paravi/U-NEXT統合等）": 8663,
+        "番組販売・BS等その他": 23564,
+        "事業（イベント・スポーツ等）": 17441,
+        "不動産（TBSテレビ単体内）": 2194,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 61234,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 88842,
+        "ライフスタイル事業 計（内部含む)": 88859,
+        "赤坂エリア不動産・関係会社": 15673
+      },
+      {
+        "決算期": "FY2025",
+        "タイム（TBSテレビ）": 81264,
+        "スポット（TBSテレビ）": 82355,
+        "配信広告（TVer等）": 12048,
+        "有料配信（Paravi/U-NEXT統合等）": 8935,
+        "番組販売・BS等その他": 24305,
+        "事業（イベント・スポーツ等）": 17989,
+        "不動産（TBSテレビ単体内）": 2263,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 63158,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 91634,
+        "ライフスタイル事業 計（内部含む)": 91651,
+        "赤坂エリア不動産・関係会社": 16166
+      },
+      {
+        "決算期": "FY2026",
+        "タイム（TBSテレビ）": 88650,
+        "スポット（TBSテレビ）": 87413,
+        "配信広告（TVer等）": 14312,
+        "有料配信（Paravi/U-NEXT統合等）": 9334,
+        "番組販売・BS等その他": 25390,
+        "事業（イベント・スポーツ等）": 18792,
+        "不動産（TBSテレビ単体内）": 2365,
+        "TBSスパークル・赤坂グラフィックス等の制作子会社": 65977,
+        "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": 95724,
+        "ライフスタイル事業 計（内部含む)": 95742,
+        "赤坂エリア不動産・関係会社": 16888
+      }
+    ],
+    "TV Tokyo HD": [
+      {
+        "決算期": "FY2015",
+        "タイム（テレ東単体）": 45100,
+        "スポット（テレ東単体）": 32200,
+        "番組販売（テレ東単体）": 3286,
+        "BSテレ東 放送収入": 12476,
+        "テレビ東京メディアネット等": 2458,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 21236,
+        "デジタル広告（テレ東AVOD等）": 2415,
+        "配信課金（テレ東SVOD等）": 7574,
+        "イベント・映画": 1128,
+        "テレ東ミュージック・AT-X他": 6405,
+        "ショッピング（テレ東ダイレクト他）": 10647,
+        "不動産賃貸": 2090
+      },
+      {
+        "決算期": "FY2016",
+        "タイム（テレ東単体）": 44800,
+        "スポット（テレ東単体）": 31900,
+        "番組販売（テレ東単体）": 3479,
+        "BSテレ東 放送収入": 13208,
+        "テレビ東京メディアネット等": 2602,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 22482,
+        "デジタル広告（テレ東AVOD等）": 3170,
+        "配信課金（テレ東SVOD等）": 8018,
+        "イベント・映画": 1194,
+        "テレ東ミュージック・AT-X他": 6781,
+        "ショッピング（テレ東ダイレクト他）": 11272,
+        "不動産賃貸": 2212
+      },
+      {
+        "決算期": "FY2017",
+        "タイム（テレ東単体）": 45200,
+        "スポット（テレ東単体）": 32399,
+        "番組販売（テレ東単体）": 3644,
+        "BSテレ東 放送収入": 13834,
+        "テレビ東京メディアネット等": 2726,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 23548,
+        "デジタル広告（テレ東AVOD等）": 3805,
+        "配信課金（テレ東SVOD等）": 8399,
+        "イベント・映画": 1251,
+        "テレ東ミュージック・AT-X他": 7103,
+        "ショッピング（テレ東ダイレクト他）": 11806,
+        "不動産賃貸": 2317
+      },
+      {
+        "決算期": "FY2018",
+        "タイム（テレ東単体）": 44100,
+        "スポット（テレ東単体）": 31000,
+        "番組販売（テレ東単体）": 3757,
+        "BSテレ東 放送収入": 14263,
+        "テレビ東京メディアネット等": 2810,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 24279,
+        "デジタル広告（テレ東AVOD等）": 4559,
+        "配信課金（テレ東SVOD等）": 8659,
+        "イベント・映画": 1289,
+        "テレ東ミュージック・AT-X他": 7323,
+        "ショッピング（テレ東ダイレクト他）": 12173,
+        "不動産賃貸": 2389
+      },
+      {
+        "決算期": "FY2019",
+        "タイム（テレ東単体）": 43500,
+        "スポット（テレ東単体）": 30200,
+        "番組販売（テレ東単体）": 3812,
+        "BSテレ東 放送収入": 14470,
+        "テレビ東京メディアネット等": 2851,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 24630,
+        "デジタル広告（テレ東AVOD等）": 5375,
+        "配信課金（テレ東SVOD等）": 8784,
+        "イベント・映画": 1308,
+        "テレ東ミュージック・AT-X他": 7429,
+        "ショッピング（テレ東ダイレクト他）": 12348,
+        "不動産賃貸": 2424
+      },
+      {
+        "決算期": "FY2020",
+        "タイム（テレ東単体）": 41200,
+        "スポット（テレ東単体）": 27800,
+        "番組販売（テレ東単体）": 3708,
+        "BSテレ東 放送収入": 14076,
+        "テレビ東京メディアネット等": 2773,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 23960,
+        "デジタル広告（テレ東AVOD等）": 5888,
+        "配信課金（テレ東SVOD等）": 8545,
+        "イベント・映画": 572,
+        "テレ東ミュージック・AT-X他": 7227,
+        "ショッピング（テレ東ダイレクト他）": 12013,
+        "不動産賃貸": 2358
+      },
+      {
+        "決算期": "FY2021",
+        "タイム（テレ東単体）": 38100,
+        "スポット（テレ東単体）": 25100,
+        "番組販売（テレ東単体）": 3553,
+        "BSテレ東 放送収入": 13486,
+        "テレビ東京メディアネット等": 2657,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 22955,
+        "デジタル広告（テレ東AVOD等）": 6673,
+        "配信課金（テレ東SVOD等）": 8187,
+        "イベント・映画": 548,
+        "テレ東ミュージック・AT-X他": 6924,
+        "ショッピング（テレ東ダイレクト他）": 11509,
+        "不動産賃貸": 2259
+      },
+      {
+        "決算期": "FY2022",
+        "タイム（テレ東単体）": 40200,
+        "スポット（テレ東単体）": 28500,
+        "番組販売（テレ東単体）": 3782,
+        "BSテレ東 放送収入": 14357,
+        "テレビ東京メディアネット等": 2829,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 24438,
+        "デジタル広告（テレ東AVOD等）": 8093,
+        "配信課金（テレ東SVOD等）": 8716,
+        "イベント・映画": 1298,
+        "テレ東ミュージック・AT-X他": 7371,
+        "ショッピング（テレ東ダイレクト他）": 12253,
+        "不動産賃貸": 2405
+      },
+      {
+        "決算期": "FY2023",
+        "タイム（テレ東単体）": 38500,
+        "スポット（テレ東単体）": 27100,
+        "番組販売（テレ東単体）": 3856,
+        "BSテレ東 放送収入": 14638,
+        "テレビ東京メディアネット等": 2884,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 24916,
+        "デジタル広告（テレ東AVOD等）": 9421,
+        "配信課金（テレ東SVOD等）": 8886,
+        "イベント・映画": 1323,
+        "テレ東ミュージック・AT-X他": 7515,
+        "ショッピング（テレ東ダイレクト他）": 12492,
+        "不動産賃貸": 2452
+      },
+      {
+        "決算期": "FY2024",
+        "タイム（テレ東単体）": 43196,
+        "スポット（テレ東単体）": 26291,
+        "番組販売（テレ東単体）": 3795,
+        "BSテレ東 放送収入": 14407,
+        "テレビ東京メディアネット等": 2839,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 24524,
+        "デジタル広告（テレ東AVOD等）": 3080,
+        "配信課金（テレ東SVOD等）": 8746,
+        "イベント・映画": 1302,
+        "テレ東ミュージック・AT-X他": 7397,
+        "ショッピング（テレ東ダイレクト他）": 12295,
+        "不動産賃貸": 2413
+      },
+      {
+        "決算期": "FY2025",
+        "タイム（テレ東単体）": 44924,
+        "スポット（テレ東単体）": 28158,
+        "番組販売（テレ東単体）": 3981,
+        "BSテレ東 放送収入": 15110,
+        "テレビ東京メディアネット等": 2977,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 25720,
+        "デジタル広告（テレ東AVOD等）": 3635,
+        "配信課金（テレ東SVOD等）": 9173,
+        "イベント・映画": 1366,
+        "テレ東ミュージック・AT-X他": 7758,
+        "ショッピング（テレ東ダイレクト他）": 12895,
+        "不動産賃貸": 2531
+      },
+      {
+        "決算期": "FY2026",
+        "タイム（テレ東単体）": 45740,
+        "スポット（テレ東単体）": 31627,
+        "番組販売（テレ東単体）": 4213,
+        "BSテレ東 放送収入": 15991,
+        "テレビ東京メディアネット等": 3151,
+        "アニメ事業（NARUTO他海外ゲーム/商品化）": 27219,
+        "デジタル広告（テレ東AVOD等）": 4200,
+        "配信課金（テレ東SVOD等）": 9708,
+        "イベント・映画": 1446,
+        "テレ東ミュージック・AT-X他": 8210,
+        "ショッピング（テレ東ダイレクト他）": 13647,
+        "不動産賃貸": 2679
+      }
+    ],
+    "Fuji Media HD": [
+      {
+        "決算期": "FY2015",
+        "タイム（フジテレビ単体）": 98500,
+        "スポット（フジテレビ単体）": 118399,
+        "配信広告（FOD/TVer）": 759,
+        "BS-CS（フジテレビ含む）・番販等": 82829,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 40472,
+        "ビーエスフジ": 18068,
+        "ニッポン放送": 17602,
+        "ポニーキャニオン": 34156,
+        "フジパシフィックミュージック": 14694,
+        "dinos（旧DINOS CORPORATION）": 50301,
+        "クオラス（広告取扱含む）": 40367,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 69970,
+        "サンケイビル": 151541,
+        "グランビスタ ホテル＆リゾート": 73275,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10641
+      },
+      {
+        "決算期": "FY2016",
+        "タイム（フジテレビ単体）": 97800,
+        "スポット（フジテレビ単体）": 116100,
+        "配信広告（FOD/TVer）": 1063,
+        "BS-CS（フジテレビ含む）・番販等": 82476,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 40299,
+        "ビーエスフジ": 17991,
+        "ニッポン放送": 17527,
+        "ポニーキャニオン": 34010,
+        "フジパシフィックミュージック": 14632,
+        "dinos（旧DINOS CORPORATION）": 50087,
+        "クオラス（広告取扱含む）": 40195,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 69672,
+        "サンケイビル": 150896,
+        "グランビスタ ホテル＆リゾート": 72962,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10596
+      },
+      {
+        "決算期": "FY2017",
+        "タイム（フジテレビ単体）": 98200,
+        "スポット（フジテレビ単体）": 117100,
+        "配信広告（FOD/TVer）": 1417,
+        "BS-CS（フジテレビ含む）・番販等": 84202,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 41143,
+        "ビーエスフジ": 18367,
+        "ニッポン放送": 17893,
+        "ポニーキャニオン": 34722,
+        "フジパシフィックミュージック": 14938,
+        "dinos（旧DINOS CORPORATION）": 51135,
+        "クオラス（広告取扱含む）": 41036,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 71130,
+        "サンケイビル": 154053,
+        "グランビスタ ホテル＆リゾート": 74489,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10818
+      },
+      {
+        "決算期": "FY2018",
+        "タイム（フジテレビ単体）": 92100,
+        "スポット（フジテレビ単体）": 105400,
+        "配信広告（FOD/TVer）": 1620,
+        "BS-CS（フジテレビ含む）・番販等": 83244,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 40674,
+        "ビーエスフジ": 18158,
+        "ニッポン放送": 17690,
+        "ポニーキャニオン": 34327,
+        "フジパシフィックミュージック": 14768,
+        "dinos（旧DINOS CORPORATION）": 50553,
+        "クオラス（広告取扱含む）": 40569,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 70320,
+        "サンケイビル": 152301,
+        "グランビスタ ホテル＆リゾート": 73642,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10695
+      },
+      {
+        "決算期": "FY2019",
+        "タイム（フジテレビ単体）": 89400,
+        "スポット（フジテレビ単体）": 102499,
+        "配信広告（FOD/TVer）": 2278,
+        "BS-CS（フジテレビ含む）・番販等": 86166,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 42102,
+        "ビーエスフジ": 18796,
+        "ニッポン放送": 18311,
+        "ポニーキャニオン": 35532,
+        "フジパシフィックミュージック": 15286,
+        "dinos（旧DINOS CORPORATION）": 52327,
+        "クオラス（広告取扱含む）": 41993,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 72789,
+        "サンケイビル": 157647,
+        "グランビスタ ホテル＆リゾート": 76227,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 11070
+      },
+      {
+        "決算期": "FY2020",
+        "タイム（フジテレビ単体）": 82500,
+        "スポット（フジテレビ単体）": 90500,
+        "配信広告（FOD/TVer）": 2632,
+        "BS-CS（フジテレビ含む）・番販等": 81306,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 17877,
+        "ビーエスフジ": 17736,
+        "ニッポン放送": 17278,
+        "ポニーキャニオン": 33528,
+        "フジパシフィックミュージック": 14424,
+        "dinos（旧DINOS CORPORATION）": 49376,
+        "クオラス（広告取扱含む）": 39624,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 68683,
+        "サンケイビル": 148754,
+        "グランビスタ ホテル＆リゾート": 39560,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10446
+      },
+      {
+        "決算期": "FY2021",
+        "タイム（フジテレビ単体）": 73100,
+        "スポット（フジテレビ単体）": 68200,
+        "配信広告（FOD/TVer）": 3088,
+        "BS-CS（フジテレビ含む）・番販等": 66944,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 14719,
+        "ビーエスフジ": 14603,
+        "ニッポン放送": 14226,
+        "ポニーキャニオン": 27606,
+        "フジパシフィックミュージック": 11876,
+        "dinos（旧DINOS CORPORATION）": 40654,
+        "クオラス（広告取扱含む）": 32625,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 56551,
+        "サンケイビル": 122479,
+        "グランビスタ ホテル＆リゾート": 32572,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 8600
+      },
+      {
+        "決算期": "FY2022",
+        "タイム（フジテレビ単体）": 74500,
+        "スポット（フジテレビ単体）": 72100,
+        "配信広告（FOD/TVer）": 3797,
+        "BS-CS（フジテレビ含む）・番販等": 67607,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 33034,
+        "ビーエスフジ": 14747,
+        "ニッポン放送": 14367,
+        "ポニーキャニオン": 27879,
+        "フジパシフィックミュージック": 11994,
+        "dinos（旧DINOS CORPORATION）": 41057,
+        "クオラス（広告取扱含む）": 32948,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 57111,
+        "サンケイビル": 123692,
+        "グランビスタ ホテル＆リゾート": 59808,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 8686
+      },
+      {
+        "決算期": "FY2023",
+        "タイム（フジテレビ単体）": 71200,
+        "スポット（フジテレビ単体）": 69800,
+        "配信広告（FOD/TVer）": 4151,
+        "BS-CS（フジテレビ含む）・番販等": 68966,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 33698,
+        "ビーエスフジ": 15044,
+        "ニッポン放送": 14656,
+        "ポニーキャニオン": 28439,
+        "フジパシフィックミュージック": 12235,
+        "dinos（旧DINOS CORPORATION）": 41882,
+        "クオラス（広告取扱含む）": 33610,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 58259,
+        "サンケイビル": 126178,
+        "グランビスタ ホテル＆リゾート": 61011,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 8860
+      },
+      {
+        "決算期": "FY2024",
+        "タイム（フジテレビ単体）": 67300,
+        "スポット（フジテレビ単体）": 62400,
+        "配信広告（FOD/TVer）": 4810,
+        "BS-CS（フジテレビ含む）・番販等": 72931,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 35636,
+        "ビーエスフジ": 15909,
+        "ニッポン放送": 15498,
+        "ポニーキャニオン": 30075,
+        "フジパシフィックミュージック": 12938,
+        "dinos（旧DINOS CORPORATION）": 44290,
+        "クオラス（広告取扱含む）": 35543,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 61609,
+        "サンケイビル": 133434,
+        "グランビスタ ホテル＆リゾート": 64519,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 9370
+      },
+      {
+        "決算期": "FY2025",
+        "タイム（フジテレビ単体）": 63470,
+        "スポット（フジテレビ単体）": 60280,
+        "配信広告（FOD/TVer）": 6278,
+        "BS-CS（フジテレビ含む）・番販等": 70912,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 34649,
+        "ビーエスフジ": 15468,
+        "ニッポン放送": 15069,
+        "ポニーキャニオン": 29242,
+        "フジパシフィックミュージック": 12580,
+        "dinos（旧DINOS CORPORATION）": 43064,
+        "クオラス（広告取扱含む）": 34559,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 59903,
+        "サンケイビル": 129739,
+        "グランビスタ ホテル＆リゾート": 62733,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 9110
+      },
+      {
+        "決算期": "FY2026",
+        "タイム（フジテレビ単体）": 40509,
+        "スポット（フジテレビ単体）": 43543,
+        "配信広告（FOD/TVer）": 8000,
+        "BS-CS（フジテレビ含む）・番販等": 71055,
+        "映画・アニメ・FOD・催物・MD（フジテレビ単体）": 34719,
+        "ビーエスフジ": 15500,
+        "ニッポン放送": 15100,
+        "ポニーキャニオン": 29301,
+        "フジパシフィックミュージック": 12606,
+        "dinos（旧DINOS CORPORATION）": 43151,
+        "クオラス（広告取扱含む）": 34629,
+        "フジクリエイティブ・共同テレビ・グレイプ他": 60024,
+        "サンケイビル": 130000,
+        "グランビスタ ホテル＆リゾート": 62859,
+        "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 9129
+      }
+    ]
+  },
+  "item_classifications": {
+    "Nippon TV HD": {
+      "タイム": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "BS・CS広告": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "デジタル広告（TVer等）": "TV Broadcasting > Digital Ads",
+      "コンテンツ販売（番販・配信権）": "Content & Streaming",
+      "コンテンツ制作受託": "Content & Streaming",
+      "物品販売": "Merchandising & Lifestyle",
+      "興行収入（映画・イベント・テーマパーク）": "Content & Streaming",
+      "不動産賃貸": "Real Estate & Others",
+      "その他収入": "Others",
+      "その他の収益（顧客契約以外）": "Others",
+      "施設利用料（スポーツクラブ）": "Wellness",
+      "物販・その他": "Wellness",
+      "不動産賃貸・管理": "Real Estate & Others"
+    },
+    "TV Asahi HD": {
+      "タイム": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "番組販売": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "BS・CS収入": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "その他収入": "Others",
+      "デジタル広告関連収入（TVer等）": "TV Broadcasting > Digital Ads",
+      "TELASA（KDDI共同・240万会員）／コアファン事業": "Content & Streaming",
+      "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": "Content & Streaming",
+      "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": "Merchandising & Lifestyle",
+      "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": "Others",
+      "不動産賃貸・管理": "Real Estate & Others"
+    },
+    "TBS HD": {
+      "タイム（TBSテレビ）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット（TBSテレビ）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "配信広告（TVer等）": "TV Broadcasting > Digital Ads",
+      "有料配信（Paravi/U-NEXT統合等）": "Content & Streaming",
+      "番組販売・BS等その他": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "事業（イベント・スポーツ等）": "Content & Streaming",
+      "不動産（TBSテレビ単体内）": "Real Estate & Others",
+      "TBSスパークル・赤坂グラフィックス等の制作子会社": "Content & Streaming",
+      "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": "Merchandising & Lifestyle",
+      "ライフスタイル事業 計（内部含む)": "(Segment Total)",
+      "赤坂エリア不動産・関係会社": "Real Estate & Others"
+    },
+    "TV Tokyo HD": {
+      "タイム（テレ東単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット（テレ東単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "番組販売（テレ東単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "BSテレ東 放送収入": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "テレビ東京メディアネット等": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "アニメ事業（NARUTO他海外ゲーム/商品化）": "Content & Streaming",
+      "デジタル広告（テレ東AVOD等）": "TV Broadcasting > Digital Ads",
+      "配信課金（テレ東SVOD等）": "Content & Streaming",
+      "イベント・映画": "Content & Streaming",
+      "テレ東ミュージック・AT-X他": "Content & Streaming",
+      "ショッピング（テレ東ダイレクト他）": "Merchandising & Lifestyle",
+      "不動産賃貸": "Real Estate & Others"
+    },
+    "Fuji Media HD": {
+      "タイム（フジテレビ単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット（フジテレビ単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "配信広告（FOD/TVer）": "TV Broadcasting > Digital Ads",
+      "BS-CS（フジテレビ含む）・番販等": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "映画・アニメ・FOD・催物・MD（フジテレビ単体）": "Content & Streaming",
+      "ビーエスフジ": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "ニッポン放送": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "ポニーキャニオン": "Content & Streaming",
+      "フジパシフィックミュージック": "Content & Streaming",
+      "dinos（旧DINOS CORPORATION）": "Merchandising & Lifestyle",
+      "クオラス（広告取扱含む）": "Content & Streaming",
+      "フジクリエイティブ・共同テレビ・グレイプ他": "Content & Streaming",
+      "サンケイビル": "Real Estate & Others",
+      "グランビスタ ホテル＆リゾート": "Real Estate & Others",
+      "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": "Others"
+    }
+  },
+  "station_profiles": {
+    "Total 5 Networks": {
+      "badge": "Total 5 Networks",
+      "title": "The perception of a 'gradual decline' in media business is shifting. Distinct station strategies have emerged.",
+      "desc": "Dentsu's 'Advertising Expenditures in Japan' shows a 10-year decline of only -7.5% in terrestrial TV ads, long fostering an industry perception of a 'gradual decline'. However, this view is now shaken from two directions: digital ads surpassed 50% of total advertising in 2025, completing a quantitative shift; and performance gaps among the 5 networks have widened, making industry-wide generalizations obsolete. TV Tokyo recorded record-high profits while Fuji reported its first operating loss, epitomizing this divergence.<br><br>Over the past 3 to 5 years, individual strategies have crystallized: Nippon TV is pivoting toward global content powered by Ghibli and Tatsunoko IP; TV Asahi is building a proprietary ecosystem around AI and Tokyo Dream Park; TBS is elevating broadcast-related businesses via SAND B and ROIC management; TV Tokyo is driving global anime expansion under CaaS; and Fuji is attempting industry-first structural reform by separating hardware (infrastructure) from software (content). Moving from shared industry challenges to distinct corporate trajectories, digital ads currently account for ~¥50B (~7% of terrestrial ads), but strategic execution in scaling content and non-broadcasting revenues will define profitability over the next decade.",
+      "question": "Standardize post-ratings advertising metrics industry-wide\n→ Can TVer integrated viewing data be nurtured as a shared 5-network trading metric?\n\nDistinguish 'Owning IP' from 'Monetizing IP' at an organizational level\n→ Is IP evaluation embedded into production budget approval flows?\n\nAddress regulatory relaxation collectively rather than individually\n→ Can the 5 networks collaborate on MIC negotiations such as hardware-software separation?"
+    },
+    "Nippon TV HD": {
+      "badge": "Nippon TV HD",
+      "title": "Nippon TV, backed by a strong terrestrial base and world-class IP, accelerates transformation into a global content company. The next challenge: speed of monetization.",
+      "desc": "Nippon TV experienced the mildest contraction in broadcast advertising among the 5 networks. Over the ~10 years from FY2015 to FY2024 (prior to Fuji's Nakai issue), time ad revenue remained nearly flat from ¥105.4B, while spot ads contracted by only -5.9%, the smallest drop in the industry. This stability directly reflects its core viewership leadership, establishing its ad competitiveness with concrete numbers.<br><br>However, guidance for FY2027 signals a shift in this stability. Expecting a drop in spot revenue, operating income is forecasted to decline sharply by -29.3% (-¥20.3B YoY). Strong ad performance in FY2026 included temporary ad inflows due to Fuji's Nakai issue; as those fade alongside irreversible ad migration to the internet, market conditions intensify.<br><br>Its IP asset portfolio is top-tier: Studio Ghibli, Tatsunoko, Madhouse, and Sumikkogurashi provide unrivaled competitive advantages. Under its 2025 medium-term plan ('Nippon TV, Open Up!'), overseas investments include GYOKURO STUDIO and an LA branch, yielding ¥92.7B in content sales (FY2026).<br><br>The critical test is execution speed: content sales of ¥92.7B account for only ~19% of consolidated net sales. Reaching the 2033 target of making content the core revenue driver requires a 3x to 4x expansion. The gap between Netflix's 10-year growth trajectory and Nippon TV's post-Hulu Japan acquisition in 2014 stems not from content quality, but from business model design.",
+      "question": "Shift global Studio Ghibli IP monetization from 'holding' to 'earning'\n→ Target international licensing, theme park, and merchandise revenues—is Walt Disney the benchmark?\n\nRedefine Hulu as a direct content monetization platform\n→ 10 years post-acquisition, the gap with Netflix lies in business design. What initiatives will overhaul this design?\n\nConvert terrestrial success into a driver of transformational urgency\n→ Overcoming the dilemma of ratings leadership: who is viewed as the primary competitor?"
+    },
+    "TV Asahi HD": {
+      "badge": "TV Asahi HD",
+      "title": "Holding a triple-crown rating strength, TV Asahi moves to build a proprietary revenue ecosystem spanning AI, IP, and physical hubs. Transitioning to 'Win in Broadcast, Monetize in Digital'.",
+      "desc": "TV Asahi is taking the most aggressive approach among the 5 networks regarding broadcast competitiveness. Maintaining its triple-crown ratings lead, its 2026–2029 plan designates AI as one of five key strategies with a ¥50B strategic investment frame. The planned Tokyo Dream Park in Ariake is designed as a company-led experiential and monetization hub centered on content IP, translating broadcasting strength into a physical economic zone.<br><br>Broadcast advertising contracted at an average rate of ~-7.8% for spot ads from FY2015 to FY2024. For FY2027, the company forecasts declines in both time and spot revenues, reflecting a realistic assessment of fading temporary ad inflows from the Nakai issue and irreversible digital migration.<br><br>While strategic alignment is high, a structural challenge exists in digital revenue: most of its ¥11.8B digital/internet revenue (FY2026) is routed through external platforms—ABEMA (led by CyberAgent), TELASA (jointly with KDDI), and TVer. While TV Asahi rides the digital wave, its direct monetization capability remains questionable. As ABEMA grows, CyberAgent's corporate valuation increases while TV Asahi remains primarily a content supplier—making Tokyo Dream Park crucial as an owned customer touchpoint.",
+      "question": "Shift relationships with ABEMA & TELASA from 'content supplier' to 'co-designer of revenues'\n→ Are positioning and revenue-sharing terms post-streaming maturity being negotiated now?\n\nEstablish Tokyo Dream Park as an owned customer touchpoint at the core of the revenue zone\n→ Can direct customer contact lost in digital streaming be reclaimed physically through live events and retail?\n\nConvert triple-crown broadcast viewers into managed CRM customers\n→ Without unifying viewer data fragmented across ABEMA, TVer, and TELASA, cross-platform customer ID design cannot succeed."
+    },
+    "TBS HD": {
+      "badge": "TBS HD",
+      "title": "Backed by financial strength, TBS launches full-scale content investments via SAND B and ROIC. Synergies with non-broadcasting businesses like StylingLife are key.",
+      "desc": "TBS boasts the most stable financial foundation among the 5 networks, achieving its 2026 mid-term operating profit target (¥24.7B) a year early and forecasting a second consecutive record operating profit (¥26.0B) for FY2027. Key transformational moves include establishing SAND B (IP venture), setting an ROIC target of 5%, and achieving the largest digital ad revenue among the 5 networks (¥14.3B in FY2026).<br><br>However, a closer look at broadcast ads reveals underlying challenges: while time ad revenue stayed exceptionally stable (-1.2% from FY2015 to FY2024), spot ad revenue dropped by -16.2%, the largest contraction among the 5 networks (more than double Dentsu's market drop of -7.5%). This decline has been masked by strong consolidated performance in lifestyle businesses (~¥95.7B across StylingLife Holdings, Plaza, LightUp, Yaruki Switch) and Akasaka real estate.<br><br>VISION 2030 targets a revenue ratio of 4:6 (Broadcast : Non-Broadcast). Whether this is achieved by expanding content/IP/streaming or scaling non-broadcast retail/real estate will define TBS's profile over the next decade.",
+      "question": "Redesign non-broadcast businesses like StylingLife as leverage for content IP\n→ Are customer bases of PLAZA, LightUp, and Yaruki Switch linked with TBS IP content, or operated independently?\n\nEstablish group-wide governance to maximize IP revenue across all channels\n→ Is there a unified framework to commercialize IP generated by SAND B, Studio Monowa, THE SEVEN, and TBS GAMES across broadcast, streaming, global rights, gaming, and merchandising?\n\nUtilize ROIC as a trigger for business portfolio restructuring\n→ Downsizing retail/real estate vs. expanding IP investments—is the primary path to achieving 5% ROIC clearly visible?"
+    },
+    "TV Tokyo HD": {
+      "badge": "TV Tokyo HD",
+      "title": "The sole network leveraging broadcast contraction—a pioneer of the 'Broadcast-Leveraged IP Monetization' model faces the challenge of scalability.",
+      "desc": "TV Tokyo reached record-high financial metrics across all indicators in FY2025. Operating profit from Anime & Streaming (¥6.5B) exceeded terrestrial & BS broadcasting profit (¥5.5B) for the first time, making it the only network where IP outpaced traditional broadcasting. Global game royalties for NARUTO/BORUTO expanded rapidly, shifting anime sales geographically to China (31.1%), North America (22.6%), and Japan (13.8%). Raising its FY2028 operating profit target to ¥12.5B under its CaaS (Content-as-a-Service) banner highlights confidence in this strategy.<br><br>However, terrestrial & BS operating profit is expected to shrink by -29% (to ¥3.5B) in FY2027. Maintaining the IP pipeline as the 'broadcast seeding mechanism' narrows poses a critical challenge. Spot ad revenue declined -18.4% from FY2015 to FY2024, requiring anime IP revenues to buffer broadcast revenue drops indefinitely.<br><br>This necessitates redefining TV Tokyo's unique assets: reproducing mega-hits like NARUTO faces capital and time constraints. Yet TV Tokyo holds two unique pillars: Anime and Business/Economic Media (WBS, Gaia no Yoake, Cambria Palace). Extending CaaS from anime to B2B business media and international licensing will define TV Tokyo's next 10 years.",
+      "question": "Discover and nurture the next NARUTO with reproducible processes\n→ Combining global viewing trends and regional data, are investment criteria and IP development pipelines structured systematically?\n\nDesign alliance strategies to accelerate global expansion despite capital constraints\n→ Leveraging external partnerships (Minto, PushBaby) while retaining rights control—where is the boundary of self-reliance?\n\nDevelop IP business models combining 'Anime' and 'Business/Economic Content'\n→ Can business content assets like WBS be commercialized into B2B licensing, global business media, and inbound tourism?"
+    },
+    "Fuji Media HD": {
+      "badge": "Fuji Media HD",
+      "title": "Real estate investment capital vs. broadcasting fixed costs—Can FMH truly achieve its transformation into a 'Content Company'?",
+      "desc": "In FY2026, Fuji Media HD recorded an operating loss of -¥8.7B despite consolidated sales of ¥551.9B, marking its first operating deficit since listing. The Media & Content segment lost -¥30.8B, partially offset by Urban Development & Tourism (+¥25.1B). Structural broadcast ad contraction pre-dates the Nakai issue: time + spot ad revenue dropped -40.2% between FY2015 and FY2024 (from ¥216.9B to ¥129.7B), 5 to 6 times faster than Dentsu's market benchmark (-7.5%).<br><br>For FY2027, management forecasts a sharp turnaround to ¥40.1B in operating profit, assuming a +55% recovery in ad revenues to ¥130.0B. However, this recovery represents only 60% of FY2015 levels—passing the worst phase is distinct from full broadcast revival.<br><br>FMH's core structural response is 'Hardware-Software Separation': transferring Fuji TV's broadcasting infrastructure to the holding company while Fuji TV focuses exclusively on production, sales, and news. Funding ¥150B in IP investments (2026–2030 plan) relies primarily on real estate cash flows, making capital preservation amidst real estate divestment pressures critical.<br><br>Initial content results are emerging: movie box office revenues ('Bomb', 'Kyojo'), archive anime global sales, and FOD subscribers surpassing 3 million demonstrate incremental progress toward a content-first company.",
+      "question": "Urban Development & Tourism profit (~¥25B/yr) funds ¥150B IP investment\n→ What alternative capital scenarios exist if real estate divestment pressure mounts?\n\nHardware-Software Separation: FMH holds broadcast infrastructure and real estate while Fuji TV becomes a pure content company\n→ What is the timeline for MIC regulatory clearance, and how much cost reduction will this contribute to the FY2030 ¥35B operating profit target?\n\nDeclaring IP investments while Media & Content operates at a -¥30.8B deficit\n→ Is there a standalone capital plan for Fuji TV's IP investments?\n\nFY2027 ad recovery target of ¥130B represents only 60% of FY2015 levels\n→ What is the target contribution ratio between broadcast ads and IP content for FY2030?\n\n10-year ad drop of -40.2% vs market drop of -7.5%\n→ What core flaws in advertising processes (trading, metrics, content approvals) caused this long-term competitiveness loss?"
+    },
+    "Comparative Insights": {
+      "badge": "Comparative Insights",
+      "title": "What the '5 Networks, 5 Strategies' Era Proves—Key Drivers for Navigating the Next 10 Years",
+      "desc": "A side-by-side comparison reveals the paradox of broadcast dependency: Fuji is the lowest (30%) while TV Asahi is the highest (63%). Yet TV Asahi maintains the most aligned transformation strategy while Fuji recorded an operating deficit. Low broadcast dependency is not inherently 'proof of transformation'—in Fuji's case, it resulted from a cumulative 10-year ad drop (-40.2%). Non-broadcast businesses (real estate, retail, tourism) buffered this decline, making understanding the underlying direction more crucial than surface ratios.<br><br>Outside traditional broadcasting, the 5 networks split into 3 strategic vectors: Broadcast-Related Expansion (Nippon TV, TV Tokyo, TBS), Owned Ecosystem Building (TV Asahi's Tokyo Dream Park & CRM), and Non-Broadcast Business Dependency (TBS's StylingLife and Fuji's Urban Development). While both TBS and Fuji rely on non-broadcast earnings, TBS is reshaping retail/real estate as 'broadcast leverage' (ROIC adoption), whereas Fuji uses real estate profits to fund IP investments.",
+      "question": "Measure transformation by 'Broadcast-Related Growth Rate' rather than 'Broadcast Dependency Ratio'\n→ Does a rising non-broadcast ratio stem from IP content growth or broadcast ad contraction?\n\nIdentify key collaboration areas that create industry-wide leverage across all 5 networks\n→ Digital ad capture (7%), global IP licensing, regulatory negotiations—can networks collaborate on shared infrastructure like TVer?\n\nAlign board members on target revenue composition ratios for 2035\n→ What is Nippon TV's target content ratio for 2033? Will TV Asahi maintain 63% broadcast share? Transformation without a target ratio risks directionless diversification."
+    }
+  }
+};
+
+</script>
+  <script>
+/* ==========================================================================
+   Commercial TV Networks Revenue Dashboard Interactive Controller (English)
+   ========================================================================== */
+
+// 1. Application State Management
+let currentStation = "Total 5 Networks";
+let graphMode = "value"; // 'value' (JPY Millions/Billions) or 'percent' (Share %)
+let activeTab = "tab-trends";
+
+// Chart instances
+let trendChart = null;
+let comparisonChart = null;
+
+// Fiscal Years (X-axis labels)
+const YEARS = [
+  "FY2015", "FY2016", "FY2017", "FY2018",
+  "FY2019", "FY2020", "FY2021", "FY2022",
+  "FY2023", "FY2024", "FY2025", "FY2026"
+];
+
+// ==========================================
+// 2. Legend & Category Definitions
+// ==========================================
+const CATEGORY_COLORS = {
+  "TV Broadcasting > Terrestrial, BS, CS, etc.": "#1E3D7C",  // Navy Blue
+  "TV Broadcasting > Digital Ads": "#1E3D7C",                // Navy with hatched pattern
+  "Content & Streaming": "#2A9D8F",                          // Emerald Teal
+  "Merchandising & Lifestyle": "#38BDF8",                    // Sky Blue
+  "Wellness": "#10B981",                                    // Bright Green
+  "Real Estate & Others": "#F59E0B",                         // Yellow Orange
+  "Others": "#6B7280"                                       // Gray
+};
+
+const CATEGORIES_LIST = [
+  "TV Broadcasting > Terrestrial, BS, CS, etc.",
+  "TV Broadcasting > Digital Ads",
+  "Content & Streaming",
+  "Merchandising & Lifestyle",
+  "Wellness",
+  "Real Estate & Others",
+  "Others"
+];
+
+let STATION_PROFILES = {};
+
+function initStationProfiles() {
+  if (typeof TV_DATA !== "undefined" && TV_DATA.station_profiles) {
+    STATION_PROFILES = TV_DATA.station_profiles;
+  } else {
+    STATION_PROFILES = {
+      "Total 5 Networks": {
+        badge: "Total 5 Networks",
+        title: "Tectonic Shift in Media: Terrestrial Ad Contraction & Structural Pivot to Content",
+        desc: "Aggregate financial data for Japan's 5 key commercial TV networks over FY2015–FY2026."
+      }
+    };
+  }
+}
+
+// ==========================================
+// 3. Application Initialization
+// ==========================================
+window.onload = function() {
+  try {
+    if (typeof TV_DATA === "undefined") {
+      throw new Error("TV_DATA is not loaded. Please ensure src/data_en.js is included.");
+    }
+    
+    initStationProfiles();
+    
+    // Comparative Insights rendering
+    if (STATION_PROFILES["Comparative Insights"]) {
+      const compTitleEl = document.getElementById("comp-insight-title");
+      const compDescEl = document.getElementById("comp-insight-desc");
+      const compQTextEl = document.getElementById("comp-insight-question");
+      const compQContEl = document.getElementById("comp-insight-question-container");
+      
+      if (compTitleEl) compTitleEl.innerText = STATION_PROFILES["Comparative Insights"].title;
+      if (compDescEl) compDescEl.innerHTML = STATION_PROFILES["Comparative Insights"].desc;
+      
+      if (compQTextEl && compQContEl) {
+        if (STATION_PROFILES["Comparative Insights"].question) {
+          compQTextEl.innerText = STATION_PROFILES["Comparative Insights"].question;
+          compQContEl.style.display = "block";
+        } else {
+          compQContEl.style.display = "none";
+        }
+      }
+    }
+    
+    // Default text rendering (Total 5 Networks)
+    if (STATION_PROFILES[currentStation]) {
+      const profile = STATION_PROFILES[currentStation];
+      const badgeEl = document.getElementById("insight-station-badge");
+      const titleEl = document.getElementById("insight-title");
+      const descEl = document.getElementById("insight-desc");
+      if (badgeEl) badgeEl.innerText = profile.badge;
+      if (titleEl) titleEl.innerText = profile.title;
+      if (descEl) descEl.innerHTML = profile.desc;
+      
+      const qTextEl = document.getElementById("insight-question");
+      const qContEl = document.getElementById("insight-question-container");
+      if (qTextEl && qContEl) {
+        if (profile.question) {
+          qTextEl.innerText = profile.question;
+          qContEl.style.display = "block";
+        } else {
+          qContEl.style.display = "none";
+        }
+      }
+    }
+    
+    updateTrendChart();
+    updateComparisonChart();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+// ==========================================
+// 4. Tab Switching Logic
+// ==========================================
+function switchTab(tabId) {
+  activeTab = tabId;
+  
+  document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
+  document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
+  
+  const activeBtn = Array.from(document.querySelectorAll(".tab-btn")).find(btn => btn.getAttribute("onclick").includes(tabId));
+  if (activeBtn) activeBtn.classList.add("active");
+  
+  document.getElementById(tabId).classList.add("active");
+  
+  setTimeout(() => {
+    window.dispatchEvent(new Event('resize'));
+  }, 100);
+}
+
+// ==========================================
+// 5. Tab 1: Trend Stacked Bar Chart Controller
+// ==========================================
+function onStationChange() {
+  currentStation = document.getElementById("station-select").value;
+  
+  const profile = STATION_PROFILES[currentStation] || {};
+  document.getElementById("insight-station-badge").innerText = profile.badge || currentStation;
+  document.getElementById("insight-title").innerText = profile.title || "";
+  document.getElementById("insight-desc").innerHTML = profile.desc || "";
+  
+  const qTextEl = document.getElementById("insight-question");
+  const qContEl = document.getElementById("insight-question-container");
+  if (qTextEl && qContEl) {
+    if (profile.question) {
+      qTextEl.innerText = profile.question;
+      qContEl.style.display = "block";
+    } else {
+      qContEl.style.display = "none";
+    }
+  }
+  
+  document.getElementById("chart-main-title").innerHTML = `<i data-lucide="bar-chart-horizontal"></i> ${currentStation}: Revenue Breakdown Trends (FY2015–FY2026)`;
+  lucide.createIcons();
+  
+  updateTrendChart();
+}
+
+function setGraphMode(mode) {
+  graphMode = mode;
+  document.getElementById("toggle-value").classList.toggle("active", mode === "value");
+  document.getElementById("toggle-percent").classList.toggle("active", mode === "percent");
+  
+  updateTrendChart();
+}
+
+function updateTrendChart() {
+  let records;
+  const stations = ["Nippon TV HD", "TV Asahi HD", "TBS HD", "TV Tokyo HD", "Fuji Media HD"];
+  
+  if (currentStation === "Total 5 Networks") {
+    records = YEARS.map(year => {
+      const mergedRec = { "決算期": year };
+      stations.forEach(st => {
+        const stRecs = TV_DATA.station_details[st] || [];
+        const rec = stRecs.find(r => r["決算期"] === year) || {};
+        for (const [key, val] of Object.entries(rec)) {
+          if (key === "決算期" || key === "sales") continue;
+          if (typeof val === "number") {
+            mergedRec[key] = (mergedRec[key] || 0) + val;
+          }
+        }
+      });
+      return mergedRec;
+    });
+  } else {
+    records = TV_DATA.station_details[currentStation] || [];
+  }
+  
+  const series = CATEGORIES_LIST.map(category => {
+    return {
+      name: category,
+      data: records.map(rec => {
+        let sum = 0;
+        for (const [key, val] of Object.entries(rec)) {
+          if (key === "決算期" || key === "sales") continue;
+          if (typeof val !== "number") continue;
+          
+          let itemCat = "Others";
+          if (currentStation === "Total 5 Networks") {
+            for (const st of stations) {
+              if (TV_DATA.item_classifications[st] && TV_DATA.item_classifications[st][key]) {
+                itemCat = TV_DATA.item_classifications[st][key];
+                break;
+              }
+            }
+          } else {
+            itemCat = (TV_DATA.item_classifications[currentStation] && TV_DATA.item_classifications[currentStation][key]) || "Others";
+          }
+          
+          if (itemCat === category) {
+            sum += val;
+          }
+        }
+        return sum;
+      })
+    };
+  });
+
+  const options = {
+    series: series,
+    chart: {
+      type: 'bar',
+      height: 450,
+      stacked: true,
+      stackType: graphMode === 'percent' ? '100%' : 'normal',
+      background: 'transparent',
+      foreColor: '#9CA3AF',
+      toolbar: { show: false },
+      events: {
+        mounted: function() { customizePattern(); },
+        updated: function() { customizePattern(); }
+      }
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '55%',
+        borderRadius: 4
+      },
+    },
+    colors: CATEGORIES_LIST.map(cat => CATEGORY_COLORS[cat]),
+    fill: {
+      type: ['solid', 'pattern', 'solid', 'solid', 'solid', 'solid', 'solid'],
+      pattern: {
+        style: 'slantedLines',
+        width: 16,
+        height: 16,
+        strokeWidth: 8
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function(val, opts) {
+        const seriesName = opts.w.config.series[opts.seriesIndex].name;
+        if (graphMode === 'percent') {
+          return val > 5 ? val.toFixed(0) + '%' : '';
+        } else {
+          if (seriesName.includes('TV Broadcasting') || seriesName === 'Content & Streaming') {
+            const bilVal = val / 1000;
+            if (bilVal >= 15) {
+              return '¥' + bilVal.toFixed(0) + 'B';
+            }
+          }
+          return '';
+        }
+      },
+      style: {
+        fontSize: '11px',
+        fontWeight: 'bold',
+        colors: ['#FFFFFF']
+      }
+    },
+    xaxis: {
+      categories: YEARS,
+      axisBorder: { show: false },
+      axisTicks: { show: false }
+    },
+    yaxis: {
+      labels: {
+        formatter: function(val) {
+          if (graphMode === 'percent') return val.toFixed(0) + '%';
+          return '¥' + (val / 1000).toFixed(0) + 'B';
+        }
+      }
+    },
+    legend: { show: false },
+    grid: {
+      borderColor: 'rgba(255, 255, 255, 0.05)',
+      strokeDashArray: 4
+    },
+    tooltip: {
+      theme: 'dark',
+      y: {
+        formatter: function(val) {
+          if (graphMode === 'percent') return val.toFixed(1) + '%';
+          return '¥' + (val / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Billion JPY';
+        }
+      }
+    }
+  };
+
+  if (trendChart) {
+    trendChart.destroy();
+  }
+  trendChart = new ApexCharts(document.querySelector("#main-trend-chart"), options);
+  trendChart.render();
+}
+
+// ==========================================
+// 6. Tab 2: Cross-Network Comparison Graph
+// ==========================================
+function updateComparisonChart() {
+  const targetYear = "FY2026";
+  const stations = ["Nippon TV HD", "TV Asahi HD", "TBS HD", "TV Tokyo HD", "Fuji Media HD"];
+  
+  const series = CATEGORIES_LIST.map(category => {
+    return {
+      name: category,
+      data: stations.map(station => {
+        const records = TV_DATA.station_details[station] || [];
+        const rec = records.find(r => r["決算期"] === targetYear) || {};
+        
+        let sum = 0;
+        for (const [key, val] of Object.entries(rec)) {
+          if (key === "決算期" || key === "sales") continue;
+          if (typeof val !== "number") continue;
+          
+          const itemCat = (TV_DATA.item_classifications[station] && TV_DATA.item_classifications[station][key]) || "Others";
+          if (itemCat === category) {
+            sum += val;
+          }
+        }
+        return sum;
+      })
+    };
+  });
+
+  const options = {
+    series: series,
+    chart: {
+      type: 'bar',
+      height: 380,
+      stacked: true,
+      stackType: '100%',
+      background: 'transparent',
+      foreColor: '#9CA3AF',
+      toolbar: { show: false },
+      events: {
+        mounted: function() { customizePattern(); },
+        updated: function() { customizePattern(); }
+      }
+    },
+    plotOptions: {
+      bar: {
+        horizontal: true,
+        barHeight: '55%',
+        borderRadius: 4
+      },
+    },
+    colors: CATEGORIES_LIST.map(cat => CATEGORY_COLORS[cat]),
+    fill: {
+      type: ['solid', 'pattern', 'solid', 'solid', 'solid', 'solid', 'solid'],
+      pattern: {
+        style: 'slantedLines',
+        width: 16,
+        height: 16,
+        strokeWidth: 8
+      }
+    },
+    dataLabels: {
+      enabled: true,
+      formatter: function(val) {
+        return val > 6 ? val.toFixed(0) + '%' : '';
+      }
+    },
+    xaxis: {
+      categories: stations,
+      axisBorder: { show: false },
+      axisTicks: { show: false }
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'center',
+      markers: { radius: 4 }
+    },
+    grid: {
+      borderColor: 'rgba(255, 255, 255, 0.05)',
+      strokeDashArray: 4
+    },
+    tooltip: {
+      theme: 'dark',
+      y: {
+        formatter: function(val, opts) {
+          const total = opts.w.globals.stackedSeriesTotals[opts.dataPointIndex];
+          const pct = total > 0 ? ((val / total) * 100).toFixed(1) + '%' : '0%';
+          return '¥' + (val / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Billion JPY (' + pct + ')';
+        }
+      }
+    }
+  };
+
+  if (comparisonChart) {
+    comparisonChart.destroy();
+  }
+  comparisonChart = new ApexCharts(document.querySelector("#comparison-companies-chart"), options);
+  comparisonChart.render();
+}
+
+// ==========================================
+// SVG Pattern Customization
+// ==========================================
+function customizePattern() {
+  const patterns = document.querySelectorAll('svg pattern');
+  patterns.forEach((pat) => {
+    if (pat.id && pat.id.includes('pattern')) {
+      pat.setAttribute('width', '16');
+      pat.setAttribute('height', '16');
+      
+      let rect = pat.querySelector('rect');
+      if (!rect) {
+        rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+        rect.setAttribute('width', '100%');
+        rect.setAttribute('height', '100%');
+        rect.setAttribute('fill', '#1E3D7C');
+        pat.insertBefore(rect, pat.firstChild);
+      } else {
+        rect.setAttribute('fill', '#1E3D7C');
+      }
+      
+      let path = pat.querySelector('path');
+      if (path) {
+        path.setAttribute('d', 'M-4,4 l8,-8 M0,16 l16,-16 M12,20 l8,-8');
+        path.setAttribute('stroke', '#FFFFFF');
+        path.setAttribute('stroke-width', '8');
+      }
+    }
+  });
+}
+
+// ==========================================
+// Save Chart Image Function
+// ==========================================
+function downloadChartImage(chartType, filename) {
+  let chartObj = null;
+  if (chartType === 'trend') {
+    chartObj = trendChart;
+  } else if (chartType === 'comparison') {
+    chartObj = comparisonChart;
+  }
+  
+  if (!chartObj) return;
+  
+  chartObj.updateOptions({
+    dataLabels: {
+      style: {
+        colors: ['#111827']
+      }
+    }
+  }, false, false).then(function() {
+    chartObj.dataURI().then(function({ imgURI }) {
+      var img = new Image();
+      img.src = imgURI;
+      img.onload = function() {
+        let titleText = "";
+        if (chartType === 'trend') {
+          const mainTitle = document.getElementById("chart-main-title");
+          titleText = mainTitle ? mainTitle.innerText : `${currentStation} Revenue Breakdown Trends (FY2015–FY2026)`;
+        } else if (chartType === 'comparison') {
+          titleText = "5 Key Commercial TV Networks: Revenue Breakdown Comparison (FY2026)";
+        }
+        
+        var canvas = document.createElement('canvas');
+        var topMargin = 75;
+        
+        canvas.width = img.width;
+        canvas.height = img.height + topMargin;
+        var ctx = canvas.getContext('2d');
+        
+        ctx.fillStyle = '#FFFFFF';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#1E3A8A';
+        ctx.font = 'bold 18px "Segoe UI", Arial, sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(titleText, canvas.width / 2, topMargin / 2 + 5);
+        
+        ctx.strokeStyle = '#E5E7EB';
+        ctx.lineWidth = 1.5;
+        ctx.beginPath();
+        ctx.moveTo(40, topMargin - 15);
+        ctx.lineTo(canvas.width - 40, topMargin - 15);
+        ctx.stroke();
+        
+        ctx.drawImage(img, 0, topMargin);
+        
+        var a = document.createElement('a');
+        a.href = canvas.toDataURL('image/png');
+        
+        var stationName = currentStation.replace(/ /g, '_');
+        if (chartType === 'comparison') {
+          stationName = "5_Key_Networks";
+        }
+        
+        var today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
+        a.download = stationName + '_' + filename + '_' + today + '.png';
+        
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        chartObj.updateOptions({
+          dataLabels: {
+            style: {
+              colors: ['#FFFFFF']
+            }
+          }
+        }, false, false);
+      };
+    }).catch(function(err) {
+      console.error(err);
+      chartObj.updateOptions({
+        dataLabels: {
+          style: {
+            colors: ['#FFFFFF']
+          }
+        }
+      }, false, false);
+    });
+  }).catch(function(err) {
+    console.error(err);
+  });
+}
+
+</script>
+  <script>
+    lucide.createIcons();
+  </script>
+</body>
+</html>
