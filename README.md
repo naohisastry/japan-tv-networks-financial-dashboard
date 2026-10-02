@@ -49,6 +49,11 @@ No web server required. Simply double-click `index.html` or `index_ja.html` to o
 
 ---
 
-## 📄 License & Attribution
+## 📄 License / ライセンス
 
-© 2026 Naohisa Hashimoto’S Update date:2026/06/15
+- **Code**（HTML / CSS / JavaScript）: [MIT License](LICENSE)
+- **Content**（文章・図表・分析結果・整理済みデータ）: [CC BY 4.0](LICENSE-CONTENT.md)
+- 出典表示例 / Attribution: Naohisa Hashimoto, "japan-tv-networks-financial-dashboard", https://naohisastry.github.io/japan-tv-networks-financial-dashboard/
+- 第三者の元データの権利は各発行元に帰属します。 / Third-party source data remain the property of their original publishers.
+
+© 2026 Naohisa Hashimoto
