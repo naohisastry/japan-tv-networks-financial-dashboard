@@ -2,13 +2,22 @@
 
 An interactive, zero-dependency web dashboard analyzing the 10-year financial transformation, revenue composition shifts, and strategic pivots of Japan's 5 major commercial television networks (**Nippon TV HD**, **TV Asahi HD**, **TBS HD**, **TV Tokyo HD**, and **Fuji Media HD**).
 
-![Status](https://img.shields.io/badge/Status-Complete-success) ![Language](https://img.shields.io/badge/Language-English-blue) ![Deployment](https://img.shields.io/badge/Deployment-GitHub%20Pages-brightgreen)
+![Status](https://img.shields.io/badge/Status-Complete-success) ![Language](https://img.shields.io/badge/Language-English%20%7C%20Japanese-blue) ![Deployment](https://img.shields.io/badge/Deployment-GitHub%20Pages-brightgreen)
+
+---
+
+## 🌐 Live Dashboards & Language Switcher
+
+Switch dynamically using the language toggle button (🌐 English / 🇯🇵 日本語) in the header:
+* **English Version (Default)**: [https://naohisastry.github.io/japan-tv-networks-financial-dashboard/](https://naohisastry.github.io/japan-tv-networks-financial-dashboard/)
+* **Japanese Version (日本語版)**: [https://naohisastry.github.io/japan-tv-networks-financial-dashboard/index_ja.html](https://naohisastry.github.io/japan-tv-networks-financial-dashboard/index_ja.html)
 
 ---
 
 ## 🌟 Key Features
 
 * **📈 10-Year Revenue Trend Analysis**: Visualizes revenue breakdowns across 7 custom financial categories from FY2015 to FY2026.
+* **🌐 One-Click Language Switcher**: Seamless toggle between English and Japanese interfaces.
 * **🔄 Dual Display Modes**: Toggle seamlessly between absolute values (**JPY Millions / Billions**) and relative shares (**100% Stacked Composition %**).
 * **🏢 Cross-Network Comparison**: Side-by-side FY2026 revenue share breakdown across all 5 major networks.
 * **💡 Strategic Executive Insights**: Detailed analytical commentaries and key strategic challenges per network and industry-wide.
@@ -32,10 +41,11 @@ An interactive, zero-dependency web dashboard analyzing the 10-year financial tr
 ## 🚀 Deployment & Usage
 
 ### 1. View Live on GitHub Pages
-* **Live Dashboard**: [https://naohisastry.github.io/japan-tv-networks-financial-dashboard/](https://naohisastry.github.io/japan-tv-networks-financial-dashboard/)
+* **English Dashboard (Default)**: `index.html`
+* **Japanese Dashboard**: `index_ja.html`
 
 ### 2. Local Usage
-No web server required. Simply double-click `index.html` to open directly in Google Chrome, Microsoft Edge, or Safari (`file:///...`).
+No web server required. Simply double-click `index.html` or `index_ja.html` to open directly in Google Chrome, Microsoft Edge, or Safari (`file:///...`).
 
 ---
 

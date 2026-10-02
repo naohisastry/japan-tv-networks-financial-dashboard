@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>民放キー５局決算資料分析ダッシュボード</title>
+  <title>Japan 5 Commercial TV Networks Financial Analysis Dashboard</title>
   
-  <!-- 画面上エラー可視化用デバッグハンドラー -->
+  <!-- Debug Console Handler -->
   <script>
     window.addEventListener('error', function(e) {
       var errorDiv = document.getElementById('debug-error-console');
@@ -29,7 +29,7 @@
         errorDiv.style.border = '2px solid #ff8888';
         
         var header = document.createElement('h3');
-        header.innerText = '🚨 画面描画エラー検知 (Debug Console)';
+        header.innerText = '🚨 Render Error Detected (Debug Console)';
         header.style.marginTop = '0';
         header.style.marginBottom = '10px';
         header.style.color = '#fff';
@@ -53,7 +53,7 @@
     }, true);
   </script>
 
-  <!-- プレミアム CSS 読み込み -->
+  <!-- Premium CSS -->
   <style>
 /* ==========================================================================
    テレビ局売上構成ダッシュボード プレミアムダークスタイルシート (Obsidian Theme)
@@ -606,158 +606,158 @@ body {
 }
 
 </style>
-  <!-- ApexCharts (高機能チャートライブラリ) CDN 読み込み -->
+  <!-- ApexCharts CDN -->
   <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <!-- Lucide Icons (ベクターアイコン) CDN 読み込み -->
+  <!-- Lucide Icons CDN -->
   <script src="https://unpkg.com/lucide@latest"></script>
 </head>
 <body>
 
   <div class="app-container">
     
-    <!-- 1. アプリケーションヘッダー -->
+    <!-- 1. Application Header -->
     <header class="app-header">
       <div class="title-group">
-        <h1>民放キー５局決算資料分析ダッシュボード</h1>
-        <p>約10年分の時系列変化及び最新の決算資料データから読み解く、テレビ局の収益構造とその変化 (2015〜2026年3月期編)</p>
+        <h1>Japan 5 Commercial TV Networks Financial Analysis Dashboard</h1>
+        <p>Analysis of TV Station Revenue Structures & Shifts over 10 Years based on Financial Results (FY2015–FY2026)</p>
       </div>
       
-      <!-- メインタブナビゲーション & 言語切替 -->
+      <!-- Main Tab Navigation & Language Switcher -->
       <div class="header-right">
         <nav class="tab-navigation">
           <button class="tab-btn active" onclick="switchTab('tab-trends')">
-            <i data-lucide="bar-chart-3"></i> 時系列売上推移
+            <i data-lucide="bar-chart-3"></i> Revenue Trends over Time
           </button>
           <button class="tab-btn" onclick="switchTab('tab-comparison')">
-            <i data-lucide="layout-grid"></i> 各テレビ局の特徴
+            <i data-lucide="layout-grid"></i> Network Profiles & Comparison
           </button>
         </nav>
-        <a href="index.html" class="lang-switch-btn" title="Switch to English">
-          <span class="lang-icon">🌐</span> English
+        <a href="index_ja.html" class="lang-switch-btn" title="日本語版に切り替え">
+          <span class="lang-icon">🇯🇵</span> 日本語
         </a>
       </div>
     </header>
 
     <!-- =======================================================================
-         タブ1: 時系列売上推移比較 (積み上げ棒グラフ & 100%構成比トグル)
+         Tab 1: Revenue Trends over Time (Stacked Bar Chart & 100% Toggle)
          ======================================================================= -->
     <div id="tab-trends" class="tab-content active">
       <div class="grid-layout">
         
-        <!-- 左側コントロールパネル -->
+        <!-- Left Control Panel -->
         <aside class="glass-card">
           <div class="glass-card-title">
-            <i data-lucide="sliders"></i> グラフ制御パネル
+            <i data-lucide="sliders"></i> Chart Controls
           </div>
 
-          <!-- コントロール1: テレビ局選択 -->
+          <!-- Control 1: Network Selection -->
           <div class="control-group">
-            <label class="control-label" for="station-select">分析対象のテレビ局</label>
+            <label class="control-label" for="station-select">Select TV Network</label>
             <select id="station-select" class="station-selector" onchange="onStationChange()">
-              <option value="5局合計" selected>5局合計 (主要5局マーケット全体)</option>
-              <option value="日本テレビHD">日本テレビHD (9404)</option>
-              <option value="テレビ朝日HD">テレビ朝日HD (9409)</option>
+              <option value="Total 5 Networks" selected>Total 5 Networks (All Commercial Networks)</option>
+              <option value="Nippon TV HD">Nippon TV HD (9404)</option>
+              <option value="TV Asahi HD">TV Asahi HD (9409)</option>
               <option value="TBS HD">TBS HD (9401)</option>
-              <option value="テレビ東京HD">テレビ東京HD (9413)</option>
-              <option value="フジ・メディアHD">フジ・メディアHD (9405)</option>
+              <option value="TV Tokyo HD">TV Tokyo HD (9413)</option>
+              <option value="Fuji Media HD">Fuji Media HD (9405)</option>
             </select>
           </div>
           
-          <!-- コントロール2: 表示モード切り替え -->
+          <!-- Control 2: Display Mode Switch -->
           <div class="control-group">
-            <label class="control-label">グラフ表示モード</label>
+            <label class="control-label">Chart Display Mode</label>
             <div class="toggle-switch-container">
               <button id="toggle-value" class="toggle-switch-btn active" onclick="setGraphMode('value')">
-                金額 (百万円)
+                Amount (JPY)
               </button>
               <button id="toggle-percent" class="toggle-switch-btn" onclick="setGraphMode('percent')">
-                構成比 (%)
+                Share (%)
               </button>
             </div>
           </div>
           
-          <!-- 凡例カード -->
+          <!-- Legend Card -->
           <div class="control-group" style="margin-top: 32px; border-top: 1px solid var(--card-border); padding-top: 20px;">
-            <label class="control-label">売上分類カテゴリー凡例</label>
+            <label class="control-label">Revenue Category Legend</label>
             <div class="legend-grid">
               <div class="legend-item">
                 <span class="legend-color-dot dot-tv"></span>
-                <span>テレビ放送＞地上波、BS、CS、その他</span>
+                <span>TV Broadcasting > Terrestrial, BS, CS, etc.</span>
               </div>
               <div class="legend-item">
                 <span class="legend-color-dot dot-digital"></span>
-                <span>テレビ放送＞デジタル広告</span>
+                <span>TV Broadcasting > Digital Ads</span>
               </div>
               <div class="legend-item">
                 <span class="legend-color-dot dot-content"></span>
-                <span>コンテンツ・配信・制作・IP</span>
+                <span>Content, Streaming, Production & IP</span>
               </div>
               <div class="legend-item">
                 <span class="legend-color-dot dot-merch"></span>
-                <span>物販・ライフスタイル</span>
+                <span>Merchandising & Lifestyle</span>
               </div>
               <div class="legend-item">
                 <span class="legend-color-dot dot-wellness"></span>
-                <span>ウェルネス</span>
+                <span>Wellness</span>
               </div>
               <div class="legend-item">
                 <span class="legend-color-dot dot-realestate"></span>
-                <span>不動産・その他</span>
+                <span>Real Estate & Others</span>
               </div>
               <div class="legend-item">
                 <span class="legend-color-dot dot-other"></span>
-                <span>その他</span>
+                <span>Others</span>
               </div>
             </div>
           </div>
         </aside>
 
-        <!-- 右側メインチャートパネル -->
+        <!-- Right Main Chart Panel -->
         <main class="dashboard-grid">
-          <!-- 積み上げ棒グラフ表示エリア -->
+          <!-- Stacked Bar Chart Area -->
           <div class="glass-card" style="grid-column: span 2;">
             <div class="glass-card-title-container">
               <div class="glass-card-title" id="chart-main-title">
-                <i data-lucide="bar-chart-horizontal"></i> 5局合計 年度別売上構成推移 (2015〜2026年3月期)
+                <i data-lucide="bar-chart-horizontal"></i> Total 5 Networks: Revenue Breakdown Trends (FY2015–FY2026)
               </div>
-              <button class="download-btn" onclick="downloadChartImage('trend', '年度別売上構成推移')">
-                <i data-lucide="download"></i> 画像として保存
+              <button class="download-btn" onclick="downloadChartImage('trend', 'Revenue_Trends')">
+                <i data-lucide="download"></i> Save as Image
               </button>
             </div>
-            <!-- ApexCharts 描画用コンテナ -->
+            <!-- ApexCharts Container -->
             <div id="main-trend-chart" style="min-height: 480px; width: 100%;"></div>
           </div>
         </main>
         
       </div>
 
-      <!-- インサイト説明枠 (フル幅デザイン) -->
+      <!-- Insight Box (Full Width) -->
       <div class="glass-card station-insight-box">
         <div class="insight-badge-row">
-          <span class="station-badge" id="insight-station-badge">5局合計</span>
+          <span class="station-badge" id="insight-station-badge">Total 5 Networks</span>
         </div>
         
         <div class="insight-split-container">
-          <!-- 左側：インサイト（事実と分析） -->
+          <!-- Left Pane: Insights (Facts & Analysis) -->
           <div class="insight-left-pane">
             <div class="pane-header">
               <i data-lucide="eye"></i>
-              <span>インサイト解説（分析と事実）</span>
+              <span>Insight Analysis & Facts</span>
             </div>
-            <h3 class="station-insight-title" id="insight-title">テレビ業界全体の地殻変動：地上波広告の激減とコンテンツ・多角化への構造改革</h3>
+            <h3 class="station-insight-title" id="insight-title">Tectonic Shift in Media: Terrestrial Ad Contraction & Structural Pivot to Content</h3>
             <p class="station-insight-desc" id="insight-desc">
-              主要民放キー局5局の財務合計データです。12年間で、本業であるテレビ放送（地上波広告・番組販売等）の収益は確実に目減りしていますが、各社が知的財産（アニメやゲーム等のIP）、ライフスタイル（物販・通販）、および不動産賃貸・都市開発へとポートフォリオを広げることで、業界全体の連結営業収益（売上規模）は維持、あるいは緩やかに拡大させています。
+              Loading insight details...
             </p>
           </div>
           
-          <!-- 右側：取り組むべき課題 -->
+          <!-- Right Pane: Key Strategic Challenges -->
           <div class="insight-right-pane" id="insight-question-container">
             <div class="pane-header highlight">
               <i data-lucide="help-circle"></i>
-              <span>取り組むべき課題</span>
+              <span>Key Strategic Challenges</span>
             </div>
             <p class="station-question-text" id="insight-question">
-              「業界の構造課題」と「自社固有 of 競争課題」を分けたとき、自社の問題の何割が本当に業界問題で、何割が自社の意思決定の問題か。
+              Loading challenges...
             </p>
           </div>
         </div>
@@ -765,113 +765,112 @@ body {
     </div>
 
     <!-- =======================================================================
-         タブ2: 各テレビ局の特徴比較 (Profiles & Segment Shares)
+         Tab 2: Network Profiles & Share Comparison
          ======================================================================= -->
     <div id="tab-comparison" class="tab-content">
       
-      <!-- 各局の概況ミニカードグリッド -->
+      <!-- Mini Profile Grid -->
       <section class="comparison-grid">
         <div class="mini-profile-card">
-          <h3 class="mini-card-name">日本テレビHD</h3>
-          <span class="mini-card-code">9404 / 連結売上 484,418百万</span>
-          <div class="mini-card-tag">地上波放送圧倒的シェア</div>
+          <h3 class="mini-card-name">Nippon TV HD</h3>
+          <span class="mini-card-code">9404 / Net Sales: JPY 484,418M</span>
+          <div class="mini-card-tag">Dominant Terrestrial Share</div>
           <div class="mini-card-value">51.3%</div>
-          <div class="mini-card-label">テレビ放送広告依存率</div>
+          <div class="mini-card-label">Broadcasting Ad Dependency</div>
         </div>
         <div class="mini-profile-card">
-          <h3 class="mini-card-name">テレビ朝日HD</h3>
-          <span class="mini-card-code">9409 / 連結売上 339,539百万</span>
-          <div class="mini-card-tag">インターネット連動推進</div>
+          <h3 class="mini-card-name">TV Asahi HD</h3>
+          <span class="mini-card-code">9409 / Net Sales: JPY 339,539M</span>
+          <div class="mini-card-tag">Internet Expansion & AI</div>
           <div class="mini-card-value">11.7%</div>
-          <div class="mini-card-label">デジタル・配信比率</div>
+          <div class="mini-card-label">Digital & Streaming Ratio</div>
         </div>
         <div class="mini-profile-card">
           <h3 class="mini-card-name">TBS HD</h3>
-          <span class="mini-card-code">9401 / 連結売上 424,850百万</span>
-          <div class="mini-card-tag">赤坂不動産と物販で高多角化</div>
+          <span class="mini-card-code">9401 / Net Sales: JPY 424,850M</span>
+          <div class="mini-card-tag">High Diversification (Real Estate & Retail)</div>
           <div class="mini-card-value">27.6%</div>
-          <div class="mini-card-label">物販・不動産売上比率</div>
+          <div class="mini-card-label">Retail & Real Estate Ratio</div>
         </div>
         <div class="mini-profile-card">
-          <h3 class="mini-card-name">テレビ東京HD</h3>
-          <span class="mini-card-code">9413 / 連結売上 164,915百万</span>
-          <div class="mini-card-tag">アニメ・海外ライツ最強特化</div>
+          <h3 class="mini-card-name">TV Tokyo HD</h3>
+          <span class="mini-card-code">9413 / Net Sales: JPY 164,915M</span>
+          <div class="mini-card-tag">Anime & Global Rights Specialization</div>
           <div class="mini-card-value">26.8%</div>
-          <div class="mini-card-label">アニメ・配信売上比率</div>
+          <div class="mini-card-label">Anime & Streaming Ratio</div>
         </div>
         <div class="mini-profile-card">
-          <h3 class="mini-card-name">フジ・メディアHD</h3>
-          <span class="mini-card-code">9405 / 連結売上 551,865百万</span>
-          <div class="mini-card-tag">都市開発と物販が本業超え</div>
+          <h3 class="mini-card-name">Fuji Media HD</h3>
+          <span class="mini-card-code">9405 / Net Sales: JPY 551,865M</span>
+          <div class="mini-card-tag">Urban Dev & Retail Exceeding TV</div>
           <div class="mini-card-value">36.7%</div>
-          <div class="mini-card-label">不動産・物販依存率</div>
+          <div class="mini-card-label">Real Estate & Retail Ratio</div>
         </div>
       </section>
 
-      <!-- 主要各局の売上構造比較 -->
+      <!-- Side-by-side Share Comparison Chart -->
       <div class="glass-card">
         <div class="glass-card-title-container">
           <div class="glass-card-title">
-            <i data-lucide="columns"></i> キー局5局 最新2026年3月期 売上構成比（横並び比較）
+            <i data-lucide="columns"></i> 5 Key Networks: Revenue Breakdown Comparison (FY2026)
           </div>
-          <button class="download-btn" onclick="downloadChartImage('comparison', '最新売上構成比比較')">
-            <i data-lucide="download"></i> 画像として保存
+          <button class="download-btn" onclick="downloadChartImage('comparison', 'Revenue_Breakdown_Comparison')">
+            <i data-lucide="download"></i> Save as Image
           </button>
         </div>
-        <!-- 5局の100%横並び比較用チャート -->
         <div id="comparison-companies-chart" style="min-height: 400px; width: 100%;"></div>
       </div>
 
-      <!-- 各局比較インサイト説明枠 (上下配置デザイン) -->
+      <!-- Comparative Insight Box -->
       <div class="glass-card station-insight-box">
         <div class="insight-badge-row">
-          <span class="station-badge" style="background: #1D4ED8; color: #FFFFFF; border-color: rgba(96, 165, 250, 0.3);">インサイト分析</span>
+          <span class="station-badge" style="background: #1D4ED8; color: #FFFFFF; border-color: rgba(96, 165, 250, 0.3);">Insight Analysis</span>
         </div>
         
         <div class="insight-vertical-container">
-          <!-- 上側：インサイト（事実と分析） -->
+          <!-- Top Pane: Insight -->
           <div class="insight-top-pane" style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid rgba(255, 255, 255, 0.05);">
             <div class="pane-header">
               <i data-lucide="eye"></i>
-              <span>インサイト解説（分析と事実）</span>
+              <span>Insight Analysis & Facts</span>
             </div>
-            <h3 class="station-insight-title" id="comp-insight-title" style="color: #60A5FA;">5局それぞれが全く異なる「独自の生存戦略」をとっている事実</h3>
+            <h3 class="station-insight-title" id="comp-insight-title" style="color: #60A5FA;">What the '5 Networks, 5 Strategies' Era Proves</h3>
             <p class="station-insight-desc" id="comp-insight-desc" style="color: var(--text-primary); margin-top: 8px;">
-              <!-- JavaScriptで動的に挿入されます -->
+              Loading comparative analysis...
             </p>
           </div>
           
-          <!-- 下側：取り組むべき課題 -->
+          <!-- Bottom Pane: Key Strategic Challenges -->
           <div class="insight-bottom-pane" id="comp-insight-question-container">
             <div class="pane-header highlight">
               <i data-lucide="help-circle"></i>
-              <span>取り組むべき課題</span>
+              <span>Key Strategic Challenges</span>
             </div>
             <p class="station-question-text" id="comp-insight-question">
-              <!-- JavaScriptで動的に挿入されます -->
+              Loading challenges...
             </p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- アプリケーションフッター -->
+    <!-- Application Footer -->
     <footer class="app-footer">
-      <p>※本ダッシュボードのデータは、各社有価証券報告書および決算説明補足資料の実績値をベースに統計加工したデータベースとなります。区分や分類における仕分けは任意で分解して再統合しています。</p>
+      <p>* Data in this dashboard is compiled based on annual securities reports and financial presentation materials of each company. Segment classifications are aggregated based on custom analytical categories.</p>
       <p style="margin-top: 8px; font-size: 12px; color: var(--text-secondary);">© 2026 Naohisa Hashimoto’S Update date:2026/06/15</p>
     </footer>
 
   </div>
 
-  <!-- 時系列データモジュール読み込み -->
+  <!-- Include English Data and Logic -->
   <script>
-// 自動生成された時系列データモジュール (2015〜2026年3月期)
+// Automatically generated financial time series data module (FY2015-FY2026)
 const TV_DATA = {
   "consolidated_summary": [
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2015年3月期",
+      "period": "FY2015",
       "sales": 362497,
       "operating_expenses": 320115,
       "operating_profit": 42382,
@@ -879,9 +878,9 @@ const TV_DATA = {
       "net_profit": 27699
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2016年3月期",
+      "period": "FY2016",
       "sales": 414780,
       "operating_expenses": 361602,
       "operating_profit": 53178,
@@ -889,9 +888,9 @@ const TV_DATA = {
       "net_profit": 36773
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2017年3月期",
+      "period": "FY2017",
       "sales": 416704,
       "operating_expenses": 364178,
       "operating_profit": 52526,
@@ -899,9 +898,9 @@ const TV_DATA = {
       "net_profit": 39116
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2018年3月期",
+      "period": "FY2018",
       "sales": 423663,
       "operating_expenses": 372699,
       "operating_profit": 50964,
@@ -909,9 +908,9 @@ const TV_DATA = {
       "net_profit": 37568
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2019年3月期",
+      "period": "FY2019",
       "sales": 424945,
       "operating_expenses": 375196,
       "operating_profit": 49749,
@@ -919,9 +918,9 @@ const TV_DATA = {
       "net_profit": 39209
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2020年3月期",
+      "period": "FY2020",
       "sales": 426599,
       "operating_expenses": 383488,
       "operating_profit": 43111,
@@ -929,9 +928,9 @@ const TV_DATA = {
       "net_profit": 30141
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2021年3月期",
+      "period": "FY2021",
       "sales": 391335,
       "operating_expenses": 356809,
       "operating_profit": 34526,
@@ -939,9 +938,9 @@ const TV_DATA = {
       "net_profit": 24009
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2022年3月期",
+      "period": "FY2022",
       "sales": 406395,
       "operating_expenses": 347713,
       "operating_profit": 58682,
@@ -949,9 +948,9 @@ const TV_DATA = {
       "net_profit": 47413
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2023年3月期",
+      "period": "FY2023",
       "sales": 413979,
       "operating_expenses": 367386,
       "operating_profit": 46593,
@@ -959,9 +958,9 @@ const TV_DATA = {
       "net_profit": 35384
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2024年3月期",
+      "period": "FY2024",
       "sales": 423523,
       "operating_expenses": 381646,
       "operating_profit": 41877,
@@ -969,9 +968,9 @@ const TV_DATA = {
       "net_profit": 39789
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2025年3月期",
+      "period": "FY2025",
       "sales": 461915,
       "operating_expenses": 406998,
       "operating_profit": 54917,
@@ -979,9 +978,9 @@ const TV_DATA = {
       "net_profit": 46000
     },
     {
-      "station": "日本テレビHD",
+      "station": "Nippon TV HD",
       "code": "9404",
-      "period": "2026年3月期",
+      "period": "FY2026",
       "sales": 484418,
       "operating_expenses": 415085,
       "operating_profit": 69332,
@@ -989,9 +988,9 @@ const TV_DATA = {
       "net_profit": 56767
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2015年3月期",
+      "period": "FY2015",
       "sales": 276473,
       "operating_expenses": 261335,
       "operating_profit": 15138,
@@ -999,9 +998,9 @@ const TV_DATA = {
       "net_profit": 11488
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2016年3月期",
+      "period": "FY2016",
       "sales": 280779,
       "operating_expenses": 264209,
       "operating_profit": 16570,
@@ -1009,9 +1008,9 @@ const TV_DATA = {
       "net_profit": 11986
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2017年3月期",
+      "period": "FY2017",
       "sales": 295879,
       "operating_expenses": 278601,
       "operating_profit": 17278,
@@ -1019,9 +1018,9 @@ const TV_DATA = {
       "net_profit": 15873
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2018年3月期",
+      "period": "FY2018",
       "sales": 302511,
       "operating_expenses": 283877,
       "operating_profit": 18634,
@@ -1029,9 +1028,9 @@ const TV_DATA = {
       "net_profit": 15332
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2019年3月期",
+      "period": "FY2019",
       "sales": 301744,
       "operating_expenses": 285580,
       "operating_profit": 16164,
@@ -1039,9 +1038,9 @@ const TV_DATA = {
       "net_profit": 12720
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2020年3月期",
+      "period": "FY2020",
       "sales": 293638,
       "operating_expenses": 281073,
       "operating_profit": 12565,
@@ -1049,9 +1048,9 @@ const TV_DATA = {
       "net_profit": 24729
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2021年3月期",
+      "period": "FY2021",
       "sales": 264557,
       "operating_expenses": 250144,
       "operating_profit": 14413,
@@ -1059,9 +1058,9 @@ const TV_DATA = {
       "net_profit": 12613
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2022年3月期",
+      "period": "FY2022",
       "sales": 298276,
       "operating_expenses": 276845,
       "operating_profit": 21431,
@@ -1069,9 +1068,9 @@ const TV_DATA = {
       "net_profit": 21000
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2023年3月期",
+      "period": "FY2023",
       "sales": 304566,
       "operating_expenses": 290063,
       "operating_profit": 14503,
@@ -1079,9 +1078,9 @@ const TV_DATA = {
       "net_profit": 16607
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2024年3月期",
+      "period": "FY2024",
       "sales": 307898,
       "operating_expenses": 295561,
       "operating_profit": 12337,
@@ -1089,9 +1088,9 @@ const TV_DATA = {
       "net_profit": 17138
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2025年3月期",
+      "period": "FY2025",
       "sales": 324056,
       "operating_expenses": 304352,
       "operating_profit": 19704,
@@ -1099,9 +1098,9 @@ const TV_DATA = {
       "net_profit": 25816
     },
     {
-      "station": "テレビ朝日HD",
+      "station": "TV Asahi HD",
       "code": "9409",
-      "period": "2026年3月期",
+      "period": "FY2026",
       "sales": 339487,
       "operating_expenses": 313306,
       "operating_profit": 26181,
@@ -1111,7 +1110,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2015年3月期",
+      "period": "FY2015",
       "sales": 347817,
       "operating_expenses": 332089,
       "operating_profit": 15728,
@@ -1121,7 +1120,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2016年3月期",
+      "period": "FY2016",
       "sales": 348539,
       "operating_expenses": 331360,
       "operating_profit": 17179,
@@ -1131,7 +1130,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2017年3月期",
+      "period": "FY2017",
       "sales": 355363,
       "operating_expenses": 335485,
       "operating_profit": 19878,
@@ -1141,7 +1140,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2018年3月期",
+      "period": "FY2018",
       "sales": 361954,
       "operating_expenses": 343154,
       "operating_profit": 18800,
@@ -1151,7 +1150,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2019年3月期",
+      "period": "FY2019",
       "sales": 366353,
       "operating_expenses": 347781,
       "operating_profit": 18572,
@@ -1161,7 +1160,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2020年3月期",
+      "period": "FY2020",
       "sales": 356796,
       "operating_expenses": 343693,
       "operating_profit": 13103,
@@ -1171,7 +1170,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2021年3月期",
+      "period": "FY2021",
       "sales": 325682,
       "operating_expenses": 314841,
       "operating_profit": 10841,
@@ -1181,7 +1180,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2022年3月期",
+      "period": "FY2022",
       "sales": 358269,
       "operating_expenses": 337923,
       "operating_profit": 20346,
@@ -1191,7 +1190,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2023年3月期",
+      "period": "FY2023",
       "sales": 368130,
       "operating_expenses": 347348,
       "operating_profit": 20782,
@@ -1201,7 +1200,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2024年3月期",
+      "period": "FY2024",
       "sales": 394309,
       "operating_expenses": 379134,
       "operating_profit": 15175,
@@ -1211,7 +1210,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2025年3月期",
+      "period": "FY2025",
       "sales": 406700,
       "operating_expenses": 387235,
       "operating_profit": 19465,
@@ -1221,7 +1220,7 @@ const TV_DATA = {
     {
       "station": "TBS HD",
       "code": "9401",
-      "period": "2026年3月期",
+      "period": "FY2026",
       "sales": 424850,
       "operating_expenses": 400100,
       "operating_profit": 24750,
@@ -1229,9 +1228,9 @@ const TV_DATA = {
       "net_profit": 52228
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2015年3月期",
+      "period": "FY2015",
       "sales": 128667,
       "operating_expenses": 123666,
       "operating_profit": 5001,
@@ -1239,9 +1238,9 @@ const TV_DATA = {
       "net_profit": 3018
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2016年3月期",
+      "period": "FY2016",
       "sales": 136216,
       "operating_expenses": 129008,
       "operating_profit": 7208,
@@ -1249,9 +1248,9 @@ const TV_DATA = {
       "net_profit": 4269
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2017年3月期",
+      "period": "FY2017",
       "sales": 142679,
       "operating_expenses": 136285,
       "operating_profit": 6394,
@@ -1259,9 +1258,9 @@ const TV_DATA = {
       "net_profit": 4215
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2018年3月期",
+      "period": "FY2018",
       "sales": 147103,
       "operating_expenses": 139673,
       "operating_profit": 7430,
@@ -1269,9 +1268,9 @@ const TV_DATA = {
       "net_profit": 5728
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2019年3月期",
+      "period": "FY2019",
       "sales": 149229,
       "operating_expenses": 143282,
       "operating_profit": 5947,
@@ -1279,9 +1278,9 @@ const TV_DATA = {
       "net_profit": 3269
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2020年3月期",
+      "period": "FY2020",
       "sales": 145173,
       "operating_expenses": 140045,
       "operating_profit": 5128,
@@ -1289,9 +1288,9 @@ const TV_DATA = {
       "net_profit": 2836
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2021年3月期",
+      "period": "FY2021",
       "sales": 139084,
       "operating_expenses": 133856,
       "operating_profit": 5228,
@@ -1299,9 +1298,9 @@ const TV_DATA = {
       "net_profit": 3741
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2022年3月期",
+      "period": "FY2022",
       "sales": 148070,
       "operating_expenses": 139486,
       "operating_profit": 8584,
@@ -1309,9 +1308,9 @@ const TV_DATA = {
       "net_profit": 6028
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2023年3月期",
+      "period": "FY2023",
       "sales": 150963,
       "operating_expenses": 141734,
       "operating_profit": 9229,
@@ -1319,9 +1318,9 @@ const TV_DATA = {
       "net_profit": 6460
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2024年3月期",
+      "period": "FY2024",
       "sales": 148587,
       "operating_expenses": 139751,
       "operating_profit": 8836,
@@ -1329,9 +1328,9 @@ const TV_DATA = {
       "net_profit": 6036
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2025年3月期",
+      "period": "FY2025",
       "sales": 155837,
       "operating_expenses": 148048,
       "operating_profit": 7789,
@@ -1339,9 +1338,9 @@ const TV_DATA = {
       "net_profit": 6037
     },
     {
-      "station": "テレビ東京HD",
+      "station": "TV Tokyo HD",
       "code": "9413",
-      "period": "2026年3月期",
+      "period": "FY2026",
       "sales": 164915,
       "operating_expenses": 153513,
       "operating_profit": 11402,
@@ -1349,9 +1348,9 @@ const TV_DATA = {
       "net_profit": 7700
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2015年3月期",
+      "period": "FY2015",
       "sales": 643313,
       "operating_expenses": 617685,
       "operating_profit": 25628,
@@ -1359,9 +1358,9 @@ const TV_DATA = {
       "net_profit": 12543
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2016年3月期",
+      "period": "FY2016",
       "sales": 640572,
       "operating_expenses": 616178,
       "operating_profit": 24394,
@@ -1369,9 +1368,9 @@ const TV_DATA = {
       "net_profit": 22628
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2017年3月期",
+      "period": "FY2017",
       "sales": 653976,
       "operating_expenses": 631657,
       "operating_profit": 22319,
@@ -1379,9 +1378,9 @@ const TV_DATA = {
       "net_profit": 27393
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2018年3月期",
+      "period": "FY2018",
       "sales": 646536,
       "operating_expenses": 621278,
       "operating_profit": 25258,
@@ -1389,9 +1388,9 @@ const TV_DATA = {
       "net_profit": 24956
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2019年3月期",
+      "period": "FY2019",
       "sales": 669230,
       "operating_expenses": 634521,
       "operating_profit": 34709,
@@ -1399,9 +1398,9 @@ const TV_DATA = {
       "net_profit": 23561
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2020年3月期",
+      "period": "FY2020",
       "sales": 631482,
       "operating_expenses": 605141,
       "operating_profit": 26341,
@@ -1409,9 +1408,9 @@ const TV_DATA = {
       "net_profit": 41249
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2021年3月期",
+      "period": "FY2021",
       "sales": 519941,
       "operating_expenses": 503667,
       "operating_profit": 16274,
@@ -1419,9 +1418,9 @@ const TV_DATA = {
       "net_profit": 10138
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2022年3月期",
+      "period": "FY2022",
       "sales": 525087,
       "operating_expenses": 491749,
       "operating_profit": 33338,
@@ -1429,9 +1428,9 @@ const TV_DATA = {
       "net_profit": 25068
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2023年3月期",
+      "period": "FY2023",
       "sales": 535641,
       "operating_expenses": 504240,
       "operating_profit": 31401,
@@ -1439,9 +1438,9 @@ const TV_DATA = {
       "net_profit": 46618
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2024年3月期",
+      "period": "FY2024",
       "sales": 566443,
       "operating_expenses": 532924,
       "operating_profit": 33519,
@@ -1449,9 +1448,9 @@ const TV_DATA = {
       "net_profit": 34963
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2025年3月期",
+      "period": "FY2025",
       "sales": 550761,
       "operating_expenses": 532468,
       "operating_profit": 18293,
@@ -1459,9 +1458,9 @@ const TV_DATA = {
       "net_profit": -20100
     },
     {
-      "station": "フジ・メディアHD",
+      "station": "Fuji Media HD",
       "code": "9405",
-      "period": "2026年3月期",
+      "period": "FY2026",
       "sales": 551865,
       "operating_expenses": 560631,
       "operating_profit": -8766,
@@ -1470,9 +1469,9 @@ const TV_DATA = {
     }
   ],
   "station_details": {
-    "日本テレビHD": [
+    "Nippon TV HD": [
       {
-        "決算期": "2015年3月期",
+        "決算期": "FY2015",
         "タイム": 105400,
         "スポット": 121000,
         "BS・CS広告": 11925,
@@ -1489,7 +1488,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 3412
       },
       {
-        "決算期": "2016年3月期",
+        "決算期": "FY2016",
         "タイム": 104800,
         "スポット": 120500,
         "BS・CS広告": 13645,
@@ -1506,7 +1505,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 3904
       },
       {
-        "決算期": "2017年3月期",
+        "決算期": "FY2017",
         "タイム": 102400,
         "スポット": 119800,
         "BS・CS広告": 13709,
@@ -1523,7 +1522,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 3922
       },
       {
-        "決算期": "2018年3月期",
+        "決算期": "FY2018",
         "タイム": 98200,
         "スポット": 115200,
         "BS・CS広告": 13938,
@@ -1540,7 +1539,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 3988
       },
       {
-        "決算期": "2019年3月期",
+        "決算期": "FY2019",
         "タイム": 95600,
         "スポット": 112100,
         "BS・CS広告": 13980,
@@ -1557,7 +1556,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 4000
       },
       {
-        "決算期": "2020年3月期",
+        "決算期": "FY2020",
         "タイム": 91800,
         "スポット": 104500,
         "BS・CS広告": 14034,
@@ -1574,7 +1573,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 4015
       },
       {
-        "決算期": "2021年3月期",
+        "決算期": "FY2021",
         "タイム": 82100,
         "スポット": 88200,
         "BS・CS広告": 12874,
@@ -1591,7 +1590,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 3683
       },
       {
-        "決算期": "2022年3月期",
+        "決算期": "FY2022",
         "タイム": 84200,
         "スポット": 92100,
         "BS・CS広告": 13370,
@@ -1608,7 +1607,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 3825
       },
       {
-        "決算期": "2023年3月期",
+        "決算期": "FY2023",
         "タイム": 81000,
         "スポット": 87800,
         "BS・CS広告": 13619,
@@ -1625,7 +1624,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 3896
       },
       {
-        "決算期": "2024年3月期",
+        "決算期": "FY2024",
         "タイム": 105152,
         "スポット": 113874,
         "BS・CS広告": 13933,
@@ -1642,7 +1641,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 3986
       },
       {
-        "決算期": "2025年3月期",
+        "決算期": "FY2025",
         "タイム": 105038,
         "スポット": 116925,
         "BS・CS広告": 15196,
@@ -1659,7 +1658,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 4348
       },
       {
-        "決算期": "2026年3月期",
+        "決算期": "FY2026",
         "タイム": 104109,
         "スポット": 127637,
         "BS・CS広告": 15937,
@@ -1676,9 +1675,9 @@ const TV_DATA = {
         "不動産賃貸・管理": 4560
       }
     ],
-    "テレビ朝日HD": [
+    "TV Asahi HD": [
       {
-        "決算期": "2015年3月期",
+        "決算期": "FY2015",
         "タイム": 85100,
         "スポット": 95600,
         "番組販売": 10947,
@@ -1692,7 +1691,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2534
       },
       {
-        "決算期": "2016年3月期",
+        "決算期": "FY2016",
         "タイム": 84600,
         "スポット": 94800,
         "番組販売": 11118,
@@ -1706,7 +1705,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2573
       },
       {
-        "決算期": "2017年3月期",
+        "決算期": "FY2017",
         "タイム": 85200,
         "スポット": 96100,
         "番組販売": 11716,
@@ -1720,7 +1719,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2712
       },
       {
-        "決算期": "2018年3月期",
+        "決算期": "FY2018",
         "タイム": 84100,
         "スポット": 93200,
         "番組販売": 11978,
@@ -1734,7 +1733,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2773
       },
       {
-        "決算期": "2019年3月期",
+        "決算期": "FY2019",
         "タイム": 82300,
         "スポット": 90500,
         "番組販売": 11948,
@@ -1748,7 +1747,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2766
       },
       {
-        "決算期": "2020年3月期",
+        "決算期": "FY2020",
         "タイム": 79100,
         "スポット": 83400,
         "番組販売": 11627,
@@ -1762,7 +1761,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2691
       },
       {
-        "決算期": "2021年3月期",
+        "決算期": "FY2021",
         "タイム": 73200,
         "スポット": 71500,
         "番組販売": 10475,
@@ -1776,7 +1775,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2425
       },
       {
-        "決算期": "2022年3月期",
+        "決算期": "FY2022",
         "タイム": 78500,
         "スポット": 80100,
         "番組販売": 11811,
@@ -1790,7 +1789,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2734
       },
       {
-        "決算期": "2023年3月期",
+        "決算期": "FY2023",
         "タイム": 75600,
         "スポット": 76800,
         "番組販売": 12060,
@@ -1804,7 +1803,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2791
       },
       {
-        "決算期": "2024年3月期",
+        "決算期": "FY2024",
         "タイム": 78744,
         "スポット": 88149,
         "番組販売": 12192,
@@ -1818,7 +1817,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2822
       },
       {
-        "決算期": "2025年3月期",
+        "決算期": "FY2025",
         "タイム": 79720,
         "スポット": 94626,
         "番組販売": 12831,
@@ -1832,7 +1831,7 @@ const TV_DATA = {
         "不動産賃貸・管理": 2970
       },
       {
-        "決算期": "2026年3月期",
+        "決算期": "FY2026",
         "タイム": 81541,
         "スポット": 105231,
         "番組販売": 13443,
@@ -1848,7 +1847,7 @@ const TV_DATA = {
     ],
     "TBS HD": [
       {
-        "決算期": "2015年3月期",
+        "決算期": "FY2015",
         "タイム（TBSテレビ）": 82600,
         "スポット（TBSテレビ）": 92800,
         "配信広告（TVer等）": 1200,
@@ -1862,7 +1861,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 13825
       },
       {
-        "決算期": "2016年3月期",
+        "決算期": "FY2016",
         "タイム（TBSテレビ）": 81800,
         "スポット（TBSテレビ）": 92100,
         "配信広告（TVer等）": 1800,
@@ -1876,7 +1875,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 13854
       },
       {
-        "決算期": "2017年3月期",
+        "決算期": "FY2017",
         "タイム（TBSテレビ）": 82400,
         "スポット（TBSテレビ）": 93200,
         "配信広告（TVer等）": 2400,
@@ -1890,7 +1889,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 14125
       },
       {
-        "決算期": "2018年3月期",
+        "決算期": "FY2018",
         "タイム（TBSテレビ）": 80500,
         "スポット（TBSテレビ）": 91400,
         "配信広告（TVer等）": 3100,
@@ -1904,7 +1903,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 14387
       },
       {
-        "決算期": "2019年3月期",
+        "決算期": "FY2019",
         "タイム（TBSテレビ）": 79200,
         "スポット（TBSテレビ）": 89800,
         "配信広告（TVer等）": 4500,
@@ -1918,7 +1917,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 14562
       },
       {
-        "決算期": "2020年3月期",
+        "決算期": "FY2020",
         "タイム（TBSテレビ）": 75600,
         "スポット（TBSテレビ）": 81500,
         "配信広告（TVer等）": 5800,
@@ -1932,7 +1931,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 14182
       },
       {
-        "決算期": "2021年3月期",
+        "決算期": "FY2021",
         "タイム（TBSテレビ）": 68200,
         "スポット（TBSテレビ）": 67300,
         "配信広告（TVer等）": 7100,
@@ -1946,7 +1945,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 12946
       },
       {
-        "決算期": "2022年3月期",
+        "決算期": "FY2022",
         "タイム（TBSテレビ）": 72400,
         "スポット（TBSテレビ）": 75100,
         "配信広告（TVer等）": 9500,
@@ -1960,7 +1959,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 14241
       },
       {
-        "決算期": "2023年3月期",
+        "決算期": "FY2023",
         "タイム（TBSテレビ）": 69800,
         "スポット（TBSテレビ）": 72400,
         "配信広告（TVer等）": 12400,
@@ -1974,7 +1973,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 14633
       },
       {
-        "決算期": "2024年3月期",
+        "決算期": "FY2024",
         "タイム（TBSテレビ）": 81590,
         "スポット（TBSテレビ）": 77767,
         "配信広告（TVer等）": 8240,
@@ -1988,7 +1987,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 15673
       },
       {
-        "決算期": "2025年3月期",
+        "決算期": "FY2025",
         "タイム（TBSテレビ）": 81264,
         "スポット（TBSテレビ）": 82355,
         "配信広告（TVer等）": 12048,
@@ -2002,7 +2001,7 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 16166
       },
       {
-        "決算期": "2026年3月期",
+        "決算期": "FY2026",
         "タイム（TBSテレビ）": 88650,
         "スポット（TBSテレビ）": 87413,
         "配信広告（TVer等）": 14312,
@@ -2016,9 +2015,9 @@ const TV_DATA = {
         "赤坂エリア不動産・関係会社": 16888
       }
     ],
-    "テレビ東京HD": [
+    "TV Tokyo HD": [
       {
-        "決算期": "2015年3月期",
+        "決算期": "FY2015",
         "タイム（テレ東単体）": 45100,
         "スポット（テレ東単体）": 32200,
         "番組販売（テレ東単体）": 3286,
@@ -2033,7 +2032,7 @@ const TV_DATA = {
         "不動産賃貸": 2090
       },
       {
-        "決算期": "2016年3月期",
+        "決算期": "FY2016",
         "タイム（テレ東単体）": 44800,
         "スポット（テレ東単体）": 31900,
         "番組販売（テレ東単体）": 3479,
@@ -2048,7 +2047,7 @@ const TV_DATA = {
         "不動産賃貸": 2212
       },
       {
-        "決算期": "2017年3月期",
+        "決算期": "FY2017",
         "タイム（テレ東単体）": 45200,
         "スポット（テレ東単体）": 32399,
         "番組販売（テレ東単体）": 3644,
@@ -2063,7 +2062,7 @@ const TV_DATA = {
         "不動産賃貸": 2317
       },
       {
-        "決算期": "2018年3月期",
+        "決算期": "FY2018",
         "タイム（テレ東単体）": 44100,
         "スポット（テレ東単体）": 31000,
         "番組販売（テレ東単体）": 3757,
@@ -2078,7 +2077,7 @@ const TV_DATA = {
         "不動産賃貸": 2389
       },
       {
-        "決算期": "2019年3月期",
+        "決算期": "FY2019",
         "タイム（テレ東単体）": 43500,
         "スポット（テレ東単体）": 30200,
         "番組販売（テレ東単体）": 3812,
@@ -2093,7 +2092,7 @@ const TV_DATA = {
         "不動産賃貸": 2424
       },
       {
-        "決算期": "2020年3月期",
+        "決算期": "FY2020",
         "タイム（テレ東単体）": 41200,
         "スポット（テレ東単体）": 27800,
         "番組販売（テレ東単体）": 3708,
@@ -2108,7 +2107,7 @@ const TV_DATA = {
         "不動産賃貸": 2358
       },
       {
-        "決算期": "2021年3月期",
+        "決算期": "FY2021",
         "タイム（テレ東単体）": 38100,
         "スポット（テレ東単体）": 25100,
         "番組販売（テレ東単体）": 3553,
@@ -2123,7 +2122,7 @@ const TV_DATA = {
         "不動産賃貸": 2259
       },
       {
-        "決算期": "2022年3月期",
+        "決算期": "FY2022",
         "タイム（テレ東単体）": 40200,
         "スポット（テレ東単体）": 28500,
         "番組販売（テレ東単体）": 3782,
@@ -2138,7 +2137,7 @@ const TV_DATA = {
         "不動産賃貸": 2405
       },
       {
-        "決算期": "2023年3月期",
+        "決算期": "FY2023",
         "タイム（テレ東単体）": 38500,
         "スポット（テレ東単体）": 27100,
         "番組販売（テレ東単体）": 3856,
@@ -2153,7 +2152,7 @@ const TV_DATA = {
         "不動産賃貸": 2452
       },
       {
-        "決算期": "2024年3月期",
+        "決算期": "FY2024",
         "タイム（テレ東単体）": 43196,
         "スポット（テレ東単体）": 26291,
         "番組販売（テレ東単体）": 3795,
@@ -2168,7 +2167,7 @@ const TV_DATA = {
         "不動産賃貸": 2413
       },
       {
-        "決算期": "2025年3月期",
+        "決算期": "FY2025",
         "タイム（テレ東単体）": 44924,
         "スポット（テレ東単体）": 28158,
         "番組販売（テレ東単体）": 3981,
@@ -2183,7 +2182,7 @@ const TV_DATA = {
         "不動産賃貸": 2531
       },
       {
-        "決算期": "2026年3月期",
+        "決算期": "FY2026",
         "タイム（テレ東単体）": 45740,
         "スポット（テレ東単体）": 31627,
         "番組販売（テレ東単体）": 4213,
@@ -2198,9 +2197,9 @@ const TV_DATA = {
         "不動産賃貸": 2679
       }
     ],
-    "フジ・メディアHD": [
+    "Fuji Media HD": [
       {
-        "決算期": "2015年3月期",
+        "決算期": "FY2015",
         "タイム（フジテレビ単体）": 98500,
         "スポット（フジテレビ単体）": 118399,
         "配信広告（FOD/TVer）": 759,
@@ -2218,7 +2217,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10641
       },
       {
-        "決算期": "2016年3月期",
+        "決算期": "FY2016",
         "タイム（フジテレビ単体）": 97800,
         "スポット（フジテレビ単体）": 116100,
         "配信広告（FOD/TVer）": 1063,
@@ -2236,7 +2235,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10596
       },
       {
-        "決算期": "2017年3月期",
+        "決算期": "FY2017",
         "タイム（フジテレビ単体）": 98200,
         "スポット（フジテレビ単体）": 117100,
         "配信広告（FOD/TVer）": 1417,
@@ -2254,7 +2253,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10818
       },
       {
-        "決算期": "2018年3月期",
+        "決算期": "FY2018",
         "タイム（フジテレビ単体）": 92100,
         "スポット（フジテレビ単体）": 105400,
         "配信広告（FOD/TVer）": 1620,
@@ -2272,7 +2271,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10695
       },
       {
-        "決算期": "2019年3月期",
+        "決算期": "FY2019",
         "タイム（フジテレビ単体）": 89400,
         "スポット（フジテレビ単体）": 102499,
         "配信広告（FOD/TVer）": 2278,
@@ -2290,7 +2289,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 11070
       },
       {
-        "決算期": "2020年3月期",
+        "決算期": "FY2020",
         "タイム（フジテレビ単体）": 82500,
         "スポット（フジテレビ単体）": 90500,
         "配信広告（FOD/TVer）": 2632,
@@ -2308,7 +2307,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 10446
       },
       {
-        "決算期": "2021年3月期",
+        "決算期": "FY2021",
         "タイム（フジテレビ単体）": 73100,
         "スポット（フジテレビ単体）": 68200,
         "配信広告（FOD/TVer）": 3088,
@@ -2326,7 +2325,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 8600
       },
       {
-        "決算期": "2022年3月期",
+        "決算期": "FY2022",
         "タイム（フジテレビ単体）": 74500,
         "スポット（フジテレビ単体）": 72100,
         "配信広告（FOD/TVer）": 3797,
@@ -2344,7 +2343,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 8686
       },
       {
-        "決算期": "2023年3月期",
+        "決算期": "FY2023",
         "タイム（フジテレビ単体）": 71200,
         "スポット（フジテレビ単体）": 69800,
         "配信広告（FOD/TVer）": 4151,
@@ -2362,7 +2361,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 8860
       },
       {
-        "決算期": "2024年3月期",
+        "決算期": "FY2024",
         "タイム（フジテレビ単体）": 67300,
         "スポット（フジテレビ単体）": 62400,
         "配信広告（FOD/TVer）": 4810,
@@ -2380,7 +2379,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 9370
       },
       {
-        "決算期": "2025年3月期",
+        "決算期": "FY2025",
         "タイム（フジテレビ単体）": 63470,
         "スポット（フジテレビ単体）": 60280,
         "配信広告（FOD/TVer）": 6278,
@@ -2398,7 +2397,7 @@ const TV_DATA = {
         "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": 9110
       },
       {
-        "決算期": "2026年3月期",
+        "決算期": "FY2026",
         "タイム（フジテレビ単体）": 40509,
         "スポット（フジテレビ単体）": 43543,
         "配信広告（FOD/TVer）": 8000,
@@ -2418,216 +2417,211 @@ const TV_DATA = {
     ]
   },
   "item_classifications": {
-    "日本テレビHD": {
-      "タイム": "テレビ放送＞地上波、BS、CS、その他",
-      "スポット": "テレビ放送＞地上波、BS、CS、その他",
-      "BS・CS広告": "テレビ放送＞地上波、BS、CS、その他",
-      "デジタル広告（TVer等）": "テレビ放送＞デジタル広告",
-      "コンテンツ販売（番販・配信権）": "コンテンツ・配信",
-      "コンテンツ制作受託": "コンテンツ・配信",
-      "物品販売": "物販・ライフ",
-      "興行収入（映画・イベント・テーマパーク）": "コンテンツ・配信",
-      "不動産賃貸": "不動産・その他",
-      "その他収入": "その他",
-      "その他の収益（顧客契約以外）": "その他",
-      "施設利用料（スポーツクラブ）": "ウェルネス",
-      "物販・その他": "ウェルネス",
-      "不動産賃貸・管理": "不動産・その他"
+    "Nippon TV HD": {
+      "タイム": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "BS・CS広告": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "デジタル広告（TVer等）": "TV Broadcasting > Digital Ads",
+      "コンテンツ販売（番販・配信権）": "Content & Streaming",
+      "コンテンツ制作受託": "Content & Streaming",
+      "物品販売": "Merchandising & Lifestyle",
+      "興行収入（映画・イベント・テーマパーク）": "Content & Streaming",
+      "不動産賃貸": "Real Estate & Others",
+      "その他収入": "Others",
+      "その他の収益（顧客契約以外）": "Others",
+      "施設利用料（スポーツクラブ）": "Wellness",
+      "物販・その他": "Wellness",
+      "不動産賃貸・管理": "Real Estate & Others"
     },
-    "テレビ朝日HD": {
-      "タイム": "テレビ放送＞地上波、BS、CS、その他",
-      "スポット": "テレビ放送＞地上波、BS、CS、その他",
-      "番組販売": "テレビ放送＞地上波、BS、CS、その他",
-      "BS・CS収入": "テレビ放送＞地上波、BS、CS、その他",
-      "その他収入": "その他",
-      "デジタル広告関連収入（TVer等）": "テレビ放送＞デジタル広告",
-      "TELASA（KDDI共同・240万会員）／コアファン事業": "コンテンツ・配信",
-      "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": "コンテンツ・配信",
-      "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": "物販・ライフ",
-      "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": "その他",
-      "不動産賃貸・管理": "不動産・その他"
+    "TV Asahi HD": {
+      "タイム": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "番組販売": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "BS・CS収入": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "その他収入": "Others",
+      "デジタル広告関連収入（TVer等）": "TV Broadcasting > Digital Ads",
+      "TELASA（KDDI共同・240万会員）／コアファン事業": "Content & Streaming",
+      "TELASA/他社配信PF向け販売／ABEMA関連／YouTube他": "Content & Streaming",
+      "ショッピング（ロッピングライフ・テレアサショップ・ichiban-boshi）": "Merchandising & Lifestyle",
+      "音楽出版・出資映画（アニメ）・イベント・機器販売リース等": "Others",
+      "不動産賃貸・管理": "Real Estate & Others"
     },
     "TBS HD": {
-      "タイム（TBSテレビ）": "テレビ放送＞地上波、BS、CS、その他",
-      "スポット（TBSテレビ）": "テレビ放送＞地上波、BS、CS、その他",
-      "配信広告（TVer等）": "テレビ放送＞デジタル広告",
-      "有料配信（Paravi/U-NEXT統合等）": "コンテンツ・配信",
-      "番組販売・BS等その他": "テレビ放送＞地上波、BS、CS、その他",
-      "事業（イベント・スポーツ等）": "コンテンツ・配信",
-      "不動産（TBSテレビ単体内）": "不動産・その他",
-      "TBSスパークル・赤坂グラフィックス等の制作子会社": "コンテンツ・配信",
-      "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": "物販・ライフ",
-      "ライフスタイル事業 計（内部含む)": "(セグメント計)",
-      "赤坂エリア不動産・関係会社": "不動産・その他"
+      "タイム（TBSテレビ）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット（TBSテレビ）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "配信広告（TVer等）": "TV Broadcasting > Digital Ads",
+      "有料配信（Paravi/U-NEXT統合等）": "Content & Streaming",
+      "番組販売・BS等その他": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "事業（イベント・スポーツ等）": "Content & Streaming",
+      "不動産（TBSテレビ単体内）": "Real Estate & Others",
+      "TBSスパークル・赤坂グラフィックス等の制作子会社": "Content & Streaming",
+      "Style Yard・物販ライフスタイル（雑貨小売、ビューティ＆ウェルネス、個別指導塾、幼児教育）": "Merchandising & Lifestyle",
+      "ライフスタイル事業 計（内部含む)": "(Segment Total)",
+      "赤坂エリア不動産・関係会社": "Real Estate & Others"
     },
-    "テレビ東京HD": {
-      "タイム（テレ東単体）": "テレビ放送＞地上波、BS、CS、その他",
-      "スポット（テレ東単体）": "テレビ放送＞地上波、BS、CS、その他",
-      "番組販売（テレ東単体）": "テレビ放送＞地上波、BS、CS、その他",
-      "BSテレ東 放送収入": "テレビ放送＞地上波、BS、CS、その他",
-      "テレビ東京メディアネット等": "テレビ放送＞地上波、BS、CS、その他",
-      "アニメ事業（NARUTO他海外ゲーム/商品化）": "コンテンツ・配信",
-      "デジタル広告（テレ東AVOD等）": "テレビ放送＞デジタル広告",
-      "配信課金（テレ東SVOD等）": "コンテンツ・配信",
-      "イベント・映画": "コンテンツ・配信",
-      "テレ東ミュージック・AT-X他": "コンテンツ・配信",
-      "ショッピング（テレ東ダイレクト他）": "物販・ライフ",
-      "不動産賃貸": "不動産・その他"
+    "TV Tokyo HD": {
+      "タイム（テレ東単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット（テレ東単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "番組販売（テレ東単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "BSテレ東 放送収入": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "テレビ東京メディアネット等": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "アニメ事業（NARUTO他海外ゲーム/商品化）": "Content & Streaming",
+      "デジタル広告（テレ東AVOD等）": "TV Broadcasting > Digital Ads",
+      "配信課金（テレ東SVOD等）": "Content & Streaming",
+      "イベント・映画": "Content & Streaming",
+      "テレ東ミュージック・AT-X他": "Content & Streaming",
+      "ショッピング（テレ東ダイレクト他）": "Merchandising & Lifestyle",
+      "不動産賃貸": "Real Estate & Others"
     },
-    "フジ・メディアHD": {
-      "タイム（フジテレビ単体）": "テレビ放送＞地上波、BS、CS、その他",
-      "スポット（フジテレビ単体）": "テレビ放送＞地上波、BS、CS、その他",
-      "配信広告（FOD/TVer）": "テレビ放送＞デジタル広告",
-      "BS-CS（フジテレビ含む）・番販等": "テレビ放送＞地上波、BS、CS、その他",
-      "映画・アニメ・FOD・催物・MD（フジテレビ単体）": "コンテンツ・配信",
-      "ビーエスフジ": "テレビ放送＞地上波、BS、CS、その他",
-      "ニッポン放送": "テレビ放送＞地上波、BS、CS、その他",
-      "ポニーキャニオン": "コンテンツ・配信",
-      "フジパシフィックミュージック": "コンテンツ・配信",
-      "dinos（旧DINOS CORPORATION）": "物販・ライフ",
-      "クオラス（広告取扱含む）": "コンテンツ・配信",
-      "フジクリエイティブ・共同テレビ・グレイプ他": "コンテンツ・配信",
-      "サンケイビル": "不動産・その他",
-      "グランビスタ ホテル＆リゾート": "不動産・その他",
-      "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": "その他"
+    "Fuji Media HD": {
+      "タイム（フジテレビ単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "スポット（フジテレビ単体）": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "配信広告（FOD/TVer）": "TV Broadcasting > Digital Ads",
+      "BS-CS（フジテレビ含む）・番販等": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "映画・アニメ・FOD・催物・MD（フジテレビ単体）": "Content & Streaming",
+      "ビーエスフジ": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "ニッポン放送": "TV Broadcasting > Terrestrial, BS, CS, etc.",
+      "ポニーキャニオン": "Content & Streaming",
+      "フジパシフィックミュージック": "Content & Streaming",
+      "dinos（旧DINOS CORPORATION）": "Merchandising & Lifestyle",
+      "クオラス（広告取扱含む）": "Content & Streaming",
+      "フジクリエイティブ・共同テレビ・グレイプ他": "Content & Streaming",
+      "サンケイビル": "Real Estate & Others",
+      "グランビスタ ホテル＆リゾート": "Real Estate & Others",
+      "扶桑社・ベイシス・人材派遣・動産リース・ソフトウェア開発等": "Others"
     }
   },
   "station_profiles": {
-    "5局合計": {
-      "badge": "5局合計",
-      "title": "「緩やかな縮小」という業界コンセンサスが、ビジネスプロセス10年不作の代償を隠してきた",
-      "desc": "電通「日本の広告費」によれば、地上波テレビ広告市場の10年縮小は約-7.5%にとどまる。この数字だけ見れば「テレビはまだ持ちこたえている」という解釈になり、実際そのコンセンサスは業界内で共有されている。しかし5局合計の決算データが示す実態は、フジ1社が業界平均の6倍速で崩壊し、その分を他の4局がシェア吸収することで「業界全体の緩やかな縮小」という数字が成立しているに過ぎない。\nより本質的な問題は別にある。インターネット広告市場が2025年に4兆円超・総広告費の50%超に達する中、5局合計のデジタル広告収入は約500億円——市場全体の約1.2%だ。コンテンツの質でも視聴者接点の規模でも劣位にないはずのテレビ局が、なぜこれだけの取りこぼしを続けているのか。答えは放送免許という参入障壁に守られた10年間、広告取引・効果指標・制作費構造といったビジネスプロセスを再設計する外圧がなかったことにある。「緩やかな縮小」というコンセンサスは、その問いを先送りにする機能も果たしてきた。",
-      "question": "ネット広告市場4兆円超、5局合計のデジタル広告捕捉額は約500億円——なぜ1.2%しか取れないのか\n\n「良いものを作れば広告主はつく」——その前提が成立していたのは、電波が唯一の伝達経路だった時代まで\n\nYouTubeとの差はコンテンツの質ではない。アルゴリズムで流通させ、データで価格をつける「収益化プロセスの設計」の差\n広告取引は代理店経由の相対交渉、効果指標は視聴率一本、制作費は非開示——放送免許という参入障壁が、この商慣習を「業界インフラ」として固定化したが、配信ビジネスの台頭で外圧に対応せざる得なくなっている\n\nTVerは前年比+147%で成長している。その恩恵を最も受けているのは、テレビ局か、それともプラットフォームか\n個社でも業界でも、ビジネスプロセスの再設計に着手しなかった10年間のコストは、デジタル広告の取りこぼし分に正直に現れている"
+    "Total 5 Networks": {
+      "badge": "Total 5 Networks",
+      "title": "The perception of a 'gradual decline' in media business is shifting. Distinct station strategies have emerged.",
+      "desc": "Dentsu's 'Advertising Expenditures in Japan' shows a 10-year decline of only -7.5% in terrestrial TV ads, long fostering an industry perception of a 'gradual decline'. However, this view is now shaken from two directions: digital ads surpassed 50% of total advertising in 2025, completing a quantitative shift; and performance gaps among the 5 networks have widened, making industry-wide generalizations obsolete. TV Tokyo recorded record-high profits while Fuji reported its first operating loss, epitomizing this divergence.<br><br>Over the past 3 to 5 years, individual strategies have crystallized: Nippon TV is pivoting toward global content powered by Ghibli and Tatsunoko IP; TV Asahi is building a proprietary ecosystem around AI and Tokyo Dream Park; TBS is elevating broadcast-related businesses via SAND B and ROIC management; TV Tokyo is driving global anime expansion under CaaS; and Fuji is attempting industry-first structural reform by separating hardware (infrastructure) from software (content). Moving from shared industry challenges to distinct corporate trajectories, digital ads currently account for ~¥50B (~7% of terrestrial ads), but strategic execution in scaling content and non-broadcasting revenues will define profitability over the next decade.",
+      "question": "Standardize post-ratings advertising metrics industry-wide\n→ Can TVer integrated viewing data be nurtured as a shared 5-network trading metric?\n\nDistinguish 'Owning IP' from 'Monetizing IP' at an organizational level\n→ Is IP evaluation embedded into production budget approval flows?\n\nAddress regulatory relaxation collectively rather than individually\n→ Can the 5 networks collaborate on MIC negotiations such as hardware-software separation?"
     },
-    "日本テレビHD": {
-      "badge": "日本テレビHD",
-      "title": "業界唯一の広告成長局が直面する逆説——王者の成功体験が、最も変革を後回しにさせる",
-      "desc": "ジブリ・タツノコ・マッドハウス・すみっコぐらしというIPアセットの質は業界最高水準にあり、2025年中計「日テレ、開国！」でGYOKURO STUDIO・LA拠点という形で海外投資にも具体的に踏み込んだ。コンテンツ販売収入は927億円（2026年3月期）と数字の実体を伴っており、宣言だけのステージは超えている。\n\n2015年3月期から2024年3月期（フジ中居問題前）までの約10年間、日テレのスポット広告収入は1,210億円から1,139億円へ約-5.9%の縮小にとどまり、タイム広告は1,054億円から1,052億円とほぼ横ばいを維持した。これは5局の中で最も緩やかな縮小であり、コア視聴率首位という実力の直接的な反映だ。放送広告市場における相対的な優位性は数字に裏付けられている。\n\nただしこの構造トレンドの上に、2026年3月期はフジ中居問題に起因した一時的な広告流入が重なっており、スポットは1,276億円（2015年3月期比+5.5%）まで押し上げられた。日テレ自身の2027年3月期業績予想が、その実態を正直に示している。地上波テレビ広告収入のうちスポット収入の減収を自ら見込み、営業利益は前期比-29.3%（▲203億円）の大幅減益を予想している。加えて、フジから流出した広告予算の一部はインターネット広告に流れており、それは戻ってこない。放送広告市場における日テレの正確なステイタスは「縮小トレンドの中で相対的には最強だが、一時的な特需の剥落と広告費のデジタル不可逆流出という二つの逆風を、2027年度以降に同時に受ける地点にいる」だ。\n\nその上で問われるのがIPアセットの収益化だ。コンテンツ販売927億円を2033年に「中核事業」にするには現状の3〜4倍規模への拡大が必要だが、日テレがHulu Japanを取得した2014年以降の10年間と、Netflixが同期間に積み上げた成長を並べたとき、差を生んだのはコンテンツの質ではなくビジネス設計にある。5局合計で指摘した「ビジネスプロセス問題」は、最も成功体験が深いこの局に最も強く当てはまる。",
-      "question": "日テレ自身が2027年3月期にスポット収入の減収と営業利益▲203億円を予想している——「放送広告の構造的縮小」と「中居問題の特需剥落」が重なる2027年度以降、放送事業の縮小対策は何で埋めていくのか、間に合うか\n\nフジから流出した広告予算の一部はインターネット広告に向かい戻らない——その流出規模をどう試算しており、それを放送外収益でどう補う計画か\n\nHulu Japan取得から10年。同じ期間のNetflix Japanの成長との差は——コンテンツの質の差ではなく、ビジネス設計の差\n\nジブリを「所有している」ことと「グローバルでマネタイズしている」ことの間には——ディズニーとの距離がある\n\nコンテンツ販売927億円（2026年3月期）を2033年に中核化するには年率約10%の複利成長が必要——その成長シナリオを支えるプラットフォーム設計は今あるか\n\n「良いコンテンツを作れば見られる」——この発想を組織が持ち続けている限り、ビジネスプロセスの再設計は後回しになる。"
+    "Nippon TV HD": {
+      "badge": "Nippon TV HD",
+      "title": "Nippon TV, backed by a strong terrestrial base and world-class IP, accelerates transformation into a global content company. The next challenge: speed of monetization.",
+      "desc": "Nippon TV experienced the mildest contraction in broadcast advertising among the 5 networks. Over the ~10 years from FY2015 to FY2024 (prior to Fuji's Nakai issue), time ad revenue remained nearly flat from ¥105.4B, while spot ads contracted by only -5.9%, the smallest drop in the industry. This stability directly reflects its core viewership leadership, establishing its ad competitiveness with concrete numbers.<br><br>However, guidance for FY2027 signals a shift in this stability. Expecting a drop in spot revenue, operating income is forecasted to decline sharply by -29.3% (-¥20.3B YoY). Strong ad performance in FY2026 included temporary ad inflows due to Fuji's Nakai issue; as those fade alongside irreversible ad migration to the internet, market conditions intensify.<br><br>Its IP asset portfolio is top-tier: Studio Ghibli, Tatsunoko, Madhouse, and Sumikkogurashi provide unrivaled competitive advantages. Under its 2025 medium-term plan ('Nippon TV, Open Up!'), overseas investments include GYOKURO STUDIO and an LA branch, yielding ¥92.7B in content sales (FY2026).<br><br>The critical test is execution speed: content sales of ¥92.7B account for only ~19% of consolidated net sales. Reaching the 2033 target of making content the core revenue driver requires a 3x to 4x expansion. The gap between Netflix's 10-year growth trajectory and Nippon TV's post-Hulu Japan acquisition in 2014 stems not from content quality, but from business model design.",
+      "question": "Shift global Studio Ghibli IP monetization from 'holding' to 'earning'\n→ Target international licensing, theme park, and merchandise revenues—is Walt Disney the benchmark?\n\nRedefine Hulu as a direct content monetization platform\n→ 10 years post-acquisition, the gap with Netflix lies in business design. What initiatives will overhaul this design?\n\nConvert terrestrial success into a driver of transformational urgency\n→ Overcoming the dilemma of ratings leadership: who is viewed as the primary competitor?"
     },
-    "テレビ朝日HD": {
-      "badge": "テレビ朝日HD",
-      "title": "5局で最も戦略が整合的な局の死角——「デジタルに乗れている」と「デジタルで稼いでいる」が課題",
-      "desc": "視聴率3冠を維持しながら2026-2029中計でAIを5大戦略の一つに明示し、500億円の戦略投資枠を確保。有明に建設予定の東京ドリームパークは、コンテンツIPを軸とした自社主導の体験・収益化拠点として構想されており、5局の中で「次の絵が最も具体的に見えている局」という評価は数字に裏付けられている。\n\n2015年3月期から2024年3月期（フジ中居問題前）までの約10年間、テレ朝のスポット広告は956億円から881億円（約-7.8%）、タイム広告は851億円から787億円（約-7.5%）と、ともに緩やかな縮小トレンドにあった。視聴率3冠という実力を持ちながら放送広告が構造的に縮小しているという事実は、日テレと本質的に同じ課題を共有していることを示す。2026年3月期には中居問題に起因した一時的な広告流入でスポットが押し上げられたが、テレ朝自身の2027年3月期業績予想では「タイム収入及びスポット収入について減収を見込む」と明示しており、営業利益は大幅減益を見込んでいる。フジから流出した広告予算の一部はインターネット広告に向かいそのまま戻らない。放送広告市場における正確なステイタスは「相対的な強さは本物だが、2027年度以降に特需の剥落と広告費のデジタル流出が顕在化する」だ。\n\nより本質的な問題はデジタル収益の構造にある。デジタル・インターネット事業11,795百万円（2026年3月期）の大半は、ABEMA（サイバーエージェント主導）・TELASA（KDDI共同）・TVerという他社プラットフォーム経由の収益だ。ABEMAが成長するほどサイバーエージェントの企業価値が上がり、テレ朝はコンテンツの供給者に留まる構造になっている。「デジタルシフトが進んでいる」という自己評価と「デジタルで誰が稼いでいるか」という現実のズレは、5局合計で指摘した「ネット広告市場の1.2%しか取れていない」問題と同根だ。500億円の投資枠の配分先が、このズレを埋めるかが今後の試金石になる。",
-      "question": "テレ朝自身が2027年3月期にタイム・スポットともに減収を予想している——「放送広告の構造的縮小」と「中居問題の特需剥落」が重なる2027年度以降の放送事業縮小対策は、500億円の投資枠と整合しているか\n\nフジから流出した広告予算の一部はインターネット広告に向かい戻らない——その流出規模をどう試算しており、東京ドリームパークや自社IPでどう補う計画か\n\nデジタル収益11,795百万円（2026年3月期）のうち——テレ朝が主導権を持つプラットフォーム経由の収益はいくらか\n\nABEMAの加入者・広告収益が成長するとき——プラットフォームの成長とコンテンツ供給者の成長は、同じ速度で連動しているか\n\n500億円の戦略投資枠——IP開発・東京ドリームパーク・AI投資の配分比率が、「自社主導の収益圏を作る」という意志を正直に示している\n\n東京ドリームパークは「他社プラットフォーム依存から脱する自社拠点」か——それとも「テレビ局がリアル施設を作った」という別の多角化か"
+    "TV Asahi HD": {
+      "badge": "TV Asahi HD",
+      "title": "Holding a triple-crown rating strength, TV Asahi moves to build a proprietary revenue ecosystem spanning AI, IP, and physical hubs. Transitioning to 'Win in Broadcast, Monetize in Digital'.",
+      "desc": "TV Asahi is taking the most aggressive approach among the 5 networks regarding broadcast competitiveness. Maintaining its triple-crown ratings lead, its 2026–2029 plan designates AI as one of five key strategies with a ¥50B strategic investment frame. The planned Tokyo Dream Park in Ariake is designed as a company-led experiential and monetization hub centered on content IP, translating broadcasting strength into a physical economic zone.<br><br>Broadcast advertising contracted at an average rate of ~-7.8% for spot ads from FY2015 to FY2024. For FY2027, the company forecasts declines in both time and spot revenues, reflecting a realistic assessment of fading temporary ad inflows from the Nakai issue and irreversible digital migration.<br><br>While strategic alignment is high, a structural challenge exists in digital revenue: most of its ¥11.8B digital/internet revenue (FY2026) is routed through external platforms—ABEMA (led by CyberAgent), TELASA (jointly with KDDI), and TVer. While TV Asahi rides the digital wave, its direct monetization capability remains questionable. As ABEMA grows, CyberAgent's corporate valuation increases while TV Asahi remains primarily a content supplier—making Tokyo Dream Park crucial as an owned customer touchpoint.",
+      "question": "Shift relationships with ABEMA & TELASA from 'content supplier' to 'co-designer of revenues'\n→ Are positioning and revenue-sharing terms post-streaming maturity being negotiated now?\n\nEstablish Tokyo Dream Park as an owned customer touchpoint at the core of the revenue zone\n→ Can direct customer contact lost in digital streaming be reclaimed physically through live events and retail?\n\nConvert triple-crown broadcast viewers into managed CRM customers\n→ Without unifying viewer data fragmented across ABEMA, TVer, and TELASA, cross-platform customer ID design cannot succeed."
     },
     "TBS HD": {
       "badge": "TBS HD",
-      "title": "「最強の財務体質が生んでいるのは安定か、それとも本業変革の先送りか」",
-      "desc": "中計2026の営業利益目標（247億円）を1年前倒しで達成し、2027年3月期も営業利益260億円・経常利益390億円と2期連続の過去最高益更新を自ら予想している。これは日テレが2027年3月期に営業利益-29.3%を見込み、テレ朝もタイム・スポットの減収と大幅減益を予想している中での、際立った対比だ。SAND B（IP事業会社）の設立、ROIC 5%という資本効率目標の自己設定、デジタル広告14,312百万円（2026年3月期、5局最大）と、変革施策の具体性という観点では5局の中で最も着実に手を打っている局の一つだ。\n\nただし、この好業績の構造を一段掘り下げる必要がある。2026年3月期の連結売上高4,248億円のうちライフスタイル事業が約957億円（約22.5%）を占め、安定した不動産収益がこれを下支えする。日テレ・テレ朝が放送広告の減収を主因に大幅減益を予想する一方、TBSが2期連続最高益を実現できる差異は放送事業の競争力ではなく、この非放送部門のポートフォリオにある。多角化戦略の成功として評価できるが、見方を変えれば「最高益の主役が放送事業か非放送事業か」という問いへの答えが、IPコングロマリット宣言の本気度をそのまま示している。\n\n2015年3月期から2024年3月期（フジ中居問題前）の約10年間、TBSの放送広告収入はタイムが826億円から816億円（約-1.2%）と業界最高水準の安定を保ったが、スポットは928億円から778億円（約-16.2%）と、日テレ（-5.9%）・テレ朝（-7.8%）を大きく上回る縮小だった。この-16.2%は電通ベースの市場縮小（-7.5%）の2倍以上のペースであり、放送事業の広告競争力に構造的な問題が蓄積していることを示している。ライフスタイル事業957億円が連結業績を支えているため、このスポット縮小は「対処すべき構造問題」ではなく「補填済みの問題」として経営議題に上りにくい可能性がある。財務的余力があるからこそ、放送事業の広告取引構造・効果指標・コンテンツ定価設定を根本から変えるより、非放送で補填するという選択が積み重なってきた——それがTBS固有のビジネスプロセス問題の蓄積だ。\n\nまた2026年3月期のタイム増収（前期比+74億円）には東京2025世界陸上という一時的なスポーツイベントの貢献が含まれている。ROIC 5%（2030年度目標）を達成するための経路は2つある。①ライフスタイル・不動産という投下資本が大きい事業を整理・縮小して利益率を高める、②SAND Bへの集中投資でコンテンツIPのリターンを高める。①を選べば財務的な安全弁を自ら手放すリスクがあり、②を選べば先行投資期間中にROICが一時的に下がることを許容しなければならない。ROIC目標が「事業再構築の引き金」として機能しているのか、それとも「資本効率を意識した経営」という方針表明に留まっているのか——その違いを、500億円ではなくSAND Bの投資規模が答えを示す。",
-      "question": "ライフスタイル事業957億円（2026年3月期）が安定成長を続けているが——その成長において「TBSというメディア資産」をどれだけ活用連携しているか。Style Yardの売上がTBSのコンテンツIP・視聴者接点・番組タイアップによって競合他社より優位に立てているなら、それはIPコングロマリット戦略の成功。しかし、ライフスタイル事業がTBSのメディアブランドとは独立して成長しているなら、それは「テレビ局が偶然に保有する優良事業」に過ぎない。放送をアセットの梃子と位置づけるなら、その梃子の効き具合を定量的に示せるかどうかが問われる\n\nスポット広告の2015→2024年3月期（中居問題前）の縮小率-16.2%は、電通ベースの市場縮小（-7.5%）の2倍以上、日テレ（-5.9%）・テレ朝（-7.8%）を大きく上回る——この縮小を「ライフスタイル事業で補填済み」として処理することが、放送広告の競争力回復を議題から外してきてはいないか\n\nデジタル広告14,312百万円（2026年3月期、5局最大）はスポット874億円の16%に過ぎない——5局最大のデジタル広告収入を持ちながら、この比率で放送事業の構造縮小に向き合える準備はできているか\n\n2026年3月期のタイム増収（前期比+74億円）には東京2025世界陸上の一時的な貢献が含まれる——スポーツイベントを除いたタイム広告の構造的な実力はどう評価しているか\n\nROIC 5%（2030年度目標）の達成経路として——低ROIC事業の整理・縮小か、SAND BへのIP集中投資か。どちらを選ぶかで「ROICが意味すること」は全く異なる。TBSにおけるROICとは\n\nTBSの変革施策（SAND B・ROIC・デジタル広告）は5局の中で最も具体的に形になっている。問われるのはその存在ではなく規模だ——スポット-16.2%という放送事業の構造縮小スピードに対して、SAND Bなどの投資規模は釣り合っていけるか"
+      "title": "Backed by financial strength, TBS launches full-scale content investments via SAND B and ROIC. Synergies with non-broadcasting businesses like StylingLife are key.",
+      "desc": "TBS boasts the most stable financial foundation among the 5 networks, achieving its 2026 mid-term operating profit target (¥24.7B) a year early and forecasting a second consecutive record operating profit (¥26.0B) for FY2027. Key transformational moves include establishing SAND B (IP venture), setting an ROIC target of 5%, and achieving the largest digital ad revenue among the 5 networks (¥14.3B in FY2026).<br><br>However, a closer look at broadcast ads reveals underlying challenges: while time ad revenue stayed exceptionally stable (-1.2% from FY2015 to FY2024), spot ad revenue dropped by -16.2%, the largest contraction among the 5 networks (more than double Dentsu's market drop of -7.5%). This decline has been masked by strong consolidated performance in lifestyle businesses (~¥95.7B across StylingLife Holdings, Plaza, LightUp, Yaruki Switch) and Akasaka real estate.<br><br>VISION 2030 targets a revenue ratio of 4:6 (Broadcast : Non-Broadcast). Whether this is achieved by expanding content/IP/streaming or scaling non-broadcast retail/real estate will define TBS's profile over the next decade.",
+      "question": "Redesign non-broadcast businesses like StylingLife as leverage for content IP\n→ Are customer bases of PLAZA, LightUp, and Yaruki Switch linked with TBS IP content, or operated independently?\n\nEstablish group-wide governance to maximize IP revenue across all channels\n→ Is there a unified framework to commercialize IP generated by SAND B, Studio Monowa, THE SEVEN, and TBS GAMES across broadcast, streaming, global rights, gaming, and merchandising?\n\nUtilize ROIC as a trigger for business portfolio restructuring\n→ Downsizing retail/real estate vs. expanding IP investments—is the primary path to achieving 5% ROIC clearly visible?"
     },
-    "テレビ東京HD": {
-      "badge": "テレビ東京HD",
-      "title": "放送事業の縮小を逆手に取った唯一の局——「放送を梃子にIPで稼ぐ」モデルの先駆者が直面する、再現性という壁",
-      "desc": "2026年3月期は売上高1,649億円・営業利益114億円と全指標で過去最高を更新した。注目すべきはセグメント構造だ。アニメ・配信事業の営業利益65億円が、地上波・BS放送事業の営業利益55億円をすでに上回っている。5局の中で唯一、放送事業の収益をIPで逆転させた局だ。\n放送広告の構造的縮小は5局で最も大きい。スポット広告は2015→2024年3月期（中居問題前）で-18.4%と、電通ベースの市場縮小（-7.5%）の2.5倍のペースで縮小してきた。しかしテレ東はこの縮小を「放送を梃子にIPで回収する」という新しいビジネスプロセスへの転換で乗り越えた。地上波放送でコンテンツを育て、グローバルライセンス・ゲーム化・商品化で収益化する——これは5局合計で指摘した「良いコンテンツを作れば見られる」という受け身の発想を脱した、業界で唯一の具体的な答えだ。アニメ事業の地域別売上比率が中国31.1%・北米22.6%・日本13.8%という構成は、国内放送局としての顔より海外IPビジネスとしての顔が主役になっていることを数字で示している。\nただし2027年3月期の業績予想が、このビジネスモデルの構造的な課題を明確に示している。地上波・BS放送事業の営業利益は前期比-29%の35億円と大幅な減益を自ら見込んでいる。中居問題による特需の剥落という一時的要因を含むが、スポット広告の構造的縮小という長期課題も同時に顕在化する局面だ。全体の業績をアニメ・配信事業が補う構造は、「放送事業が稼げなくてもIPがある」という状態の定着を意味する。これは戦略的な成功であると同時に、アニメ・配信事業——とりわけNARUTO・BORUTOへの依存度——の持続性が企業価値を決定するという集中リスクへの転換でもある。",
-      "question": "アニメ事業のタイトル別ランキングで1位NARUTO・2位BORUTOが占める——この2タイトルが失速した場合のダウンサイドシナリオを持っているか\n\nアニメ事業の地域別売上は中国31.1%・北米22.6%・日本13.8%——中国市場の規制リスク・プラットフォームリスクに対するヘッジ戦略はあるか\n\n2027年3月期の地上波・BS放送事業の営業利益は前期比-29%（35億円）——中居問題の特需剥落と放送広告の構造縮小が重なるこの局面を、アニメ・配信だけで補い続けられるか\n\n地上波放送がIPの「種まき機能」として機能し続けるためには、放送で育てた作品がグローバルIPに育つ確率を高める必要がある——現在のアニメ・配信事業の利益65億円のうち、NARUTO・BORUTO以外のタイトルが占める比率はどの程度か\n\n中計を上方修正し28年3月期の営業利益目標を125億円に引き上げた——その前提となるアニメ事業の成長シナリオはNARUTO継続好調を前提にしているか。次世代IPが主役になる年度をどこに置いているか\n\n売上高1,649億円（2026年3月期）は日テレの4,844億円の約3分の1——資本力の差が「次のメガIPを仕込む」投資規模に直結する中で、大手配信プラットフォームや他局とのアライアンスという選択肢を、自前主義と天秤にかけているか"
+    "TV Tokyo HD": {
+      "badge": "TV Tokyo HD",
+      "title": "The sole network leveraging broadcast contraction—a pioneer of the 'Broadcast-Leveraged IP Monetization' model faces the challenge of scalability.",
+      "desc": "TV Tokyo reached record-high financial metrics across all indicators in FY2025. Operating profit from Anime & Streaming (¥6.5B) exceeded terrestrial & BS broadcasting profit (¥5.5B) for the first time, making it the only network where IP outpaced traditional broadcasting. Global game royalties for NARUTO/BORUTO expanded rapidly, shifting anime sales geographically to China (31.1%), North America (22.6%), and Japan (13.8%). Raising its FY2028 operating profit target to ¥12.5B under its CaaS (Content-as-a-Service) banner highlights confidence in this strategy.<br><br>However, terrestrial & BS operating profit is expected to shrink by -29% (to ¥3.5B) in FY2027. Maintaining the IP pipeline as the 'broadcast seeding mechanism' narrows poses a critical challenge. Spot ad revenue declined -18.4% from FY2015 to FY2024, requiring anime IP revenues to buffer broadcast revenue drops indefinitely.<br><br>This necessitates redefining TV Tokyo's unique assets: reproducing mega-hits like NARUTO faces capital and time constraints. Yet TV Tokyo holds two unique pillars: Anime and Business/Economic Media (WBS, Gaia no Yoake, Cambria Palace). Extending CaaS from anime to B2B business media and international licensing will define TV Tokyo's next 10 years.",
+      "question": "Discover and nurture the next NARUTO with reproducible processes\n→ Combining global viewing trends and regional data, are investment criteria and IP development pipelines structured systematically?\n\nDesign alliance strategies to accelerate global expansion despite capital constraints\n→ Leveraging external partnerships (Minto, PushBaby) while retaining rights control—where is the boundary of self-reliance?\n\nDevelop IP business models combining 'Anime' and 'Business/Economic Content'\n→ Can business content assets like WBS be commercialized into B2B licensing, global business media, and inbound tourism?"
     },
-    "フジ・メディアHD": {
-      "badge": "フジ・メディアHD",
-      "title": "不動産という投資原資と、放送インフラという固定費——「コンテンツカンパニー」への転換を本当にめざせるのか",
-      "desc": "2026年3月期は連結売上高5,518億円を維持しながら、営業損益は-87億円と上場来初の赤字を記録した。セグメントを見ると実態はより厳しい。メディア・コンテンツ事業の営業損益は-308億円の赤字であり、都市開発・観光事業の+251億円の黒字がこれを部分的に補う構造だ。フジテレビジョン単体では営業損失-325億円、放送収入は前期比-32.1%減という数字が残った。\n\n放送広告の構造的な崩壊は中居問題だけでは説明できない。2015年3月期から2024年3月期（中居問題前）までの10年間で、タイム+スポット広告の合計は2,169億円から1,297億円へ約-40.2%縮小していた。電通ベースの市場縮小（-7.5%）の5〜6倍のペースであり、2015年時点でスポット広告が日テレに次ぐ業界2位（1,184億円）だったフジが、中居問題が起きる前の段階で既に業界最大の構造的縮小を抱えていた。中居問題はその崩壊に引き金を引いたが、根底にある放送事業の競争力の喪失は10年かけて積み上がったものだ。\n\nこうした状況の中、FMHの主要収益源であるサンケイビルなど不動産事業の切り出しを求める外部圧力が続いている。問題の核心は、この不動産収益が「コンテンツカンパニー化」のための投資原資そのものだという点だ。都市開発・観光事業の年間利益約250億円がなければ、2030年度までに掲げた1,500億円のIP・コンテンツ投資は成立しない。メディア・コンテンツ事業が-308億円の赤字を抱えたままの状態で、フジテレビ単体に「コンテンツカンパニー」としての資本力はない。不動産が切り出された後の投資原資をどこに求めるかの答えなしに、変革の宣言だけが宙に浮く。\n\nこの問題に対してFMHが提示したのが「ハード・ソフト分離」戦略だ。フジテレビの放送インフラ機能・放送用設備などハードアセットをFMH（持株会社）に移管し、フジテレビはソフト（番組制作・報道・営業）に集中する。放送インフラと不動産をFMHが一括保有し、フジテレビをコンテンツに特化した身軽な事業会社として再定義する構造だ。地上波テレビ局では前例がなく総務省との折衝が必要だが、不動産資本を守りながらコンテンツ投資能力を確保するという意図が読める。\n\n2027年3月期の業績予想は営業利益401億円の大幅黒字化を見込む。タイム+スポット収入が前期比+55%の1,300億円まで回復する前提だが、これは2024年3月期の水準（1,297億円）に戻るに過ぎず、2015年比では60%水準での「正常化」だ。放送広告基盤の約4割は永続的に失われた水準であることを前提に、1,500億円のIP・コンテンツ投資と不動産の外部圧力という二つの課題を同時に遂行しなければならない局面にある。",
-      "question": "都市開発・観光事業の年間利益約250億円が1,500億円のIP投資の主要原資だ——不動産の切り出し圧力が続く中、コンテンツ投資原資をどう確保するかの具体的な代替シナリオを持っているか\n\nハード・ソフト分離によりFMHが放送インフラと不動産を一括保有し、フジテレビをコンテンツ特化の事業会社にする構想——総務省との折衝を含めたタイムラインと、この構造変革が2030年度の営業利益目標350億円のうち何億円のコスト改善に貢献するか\n\nメディア・コンテンツ事業が-308億円の赤字のまま「コンテンツカンパニー」への投資を宣言している——フジテレビ単体の資本力でIP投資を自立させるシナリオは、何年度から成立する計画か\n\n2027年3月期の広告収入回復目標1,300億円は2015年比60%の水準——「最悪期を脱した」と「放送事業が再生した」は別問題。2030年度の営業利益目標350億円のうち、放送広告とIPコンテンツの貢献比率はどう設定されているか\n\n2015→2024年3月期（中居問題前）の放送広告-40.2%は業界全体の縮小（-7.5%）の5〜6倍——この10年間の構造的な競争力喪失の根本原因として、放送のビジネスプロセス（広告取引・効果指標・コンテンツ投資判断）のどこに問題があったと総括しているか\n\n「コンテンツカンパニー」への転換は正しい方向だ。問われるのは、その投資を支える不動産という原資が外部圧力にさらされている今、1,500億円の計画を実行し切るための資本構造がどう維持されるか"
+    "Fuji Media HD": {
+      "badge": "Fuji Media HD",
+      "title": "Real estate investment capital vs. broadcasting fixed costs—Can FMH truly achieve its transformation into a 'Content Company'?",
+      "desc": "In FY2026, Fuji Media HD recorded an operating loss of -¥8.7B despite consolidated sales of ¥551.9B, marking its first operating deficit since listing. The Media & Content segment lost -¥30.8B, partially offset by Urban Development & Tourism (+¥25.1B). Structural broadcast ad contraction pre-dates the Nakai issue: time + spot ad revenue dropped -40.2% between FY2015 and FY2024 (from ¥216.9B to ¥129.7B), 5 to 6 times faster than Dentsu's market benchmark (-7.5%).<br><br>For FY2027, management forecasts a sharp turnaround to ¥40.1B in operating profit, assuming a +55% recovery in ad revenues to ¥130.0B. However, this recovery represents only 60% of FY2015 levels—passing the worst phase is distinct from full broadcast revival.<br><br>FMH's core structural response is 'Hardware-Software Separation': transferring Fuji TV's broadcasting infrastructure to the holding company while Fuji TV focuses exclusively on production, sales, and news. Funding ¥150B in IP investments (2026–2030 plan) relies primarily on real estate cash flows, making capital preservation amidst real estate divestment pressures critical.<br><br>Initial content results are emerging: movie box office revenues ('Bomb', 'Kyojo'), archive anime global sales, and FOD subscribers surpassing 3 million demonstrate incremental progress toward a content-first company.",
+      "question": "Urban Development & Tourism profit (~¥25B/yr) funds ¥150B IP investment\n→ What alternative capital scenarios exist if real estate divestment pressure mounts?\n\nHardware-Software Separation: FMH holds broadcast infrastructure and real estate while Fuji TV becomes a pure content company\n→ What is the timeline for MIC regulatory clearance, and how much cost reduction will this contribute to the FY2030 ¥35B operating profit target?\n\nDeclaring IP investments while Media & Content operates at a -¥30.8B deficit\n→ Is there a standalone capital plan for Fuji TV's IP investments?\n\nFY2027 ad recovery target of ¥130B represents only 60% of FY2015 levels\n→ What is the target contribution ratio between broadcast ads and IP content for FY2030?\n\n10-year ad drop of -40.2% vs market drop of -7.5%\n→ What core flaws in advertising processes (trading, metrics, content approvals) caused this long-term competitiveness loss?"
     },
-    "比較インサイト": {
-      "badge": "比較インサイト",
-      "title": "「5局5様の変革」が証明したこと、そして見いだせること——業界として次の10年を戦えるかどうかのポイント",
-      "desc": "売上構成比を横並びで見ると、5局の戦略的な立ち位置の違いが鮮明になる。放送依存率が最も高いのはテレ朝（63%）、最も低いのはフジ（30%）だが、この数字は変革の進捗を直接示すものではない。フジの放送比率の低さは戦略的な多角化の成果ではなく、放送広告の崩壊と放送外事業である不動産（32%）への依存という逆転構造の結果だ。一方テレ朝は放送依存率が高いまま整合的な変革戦略を持ち、テレ東は放送60%を維持しながら放送関連事業（コンテンツ・配信）28%という転換を進めている。\n\n構成比が似ている局でも、その中身の成り立ちは全く異なる。コンテンツ・配信比率が近い日テレ（30%）・テレ東（28%）・フジ（28%）のうち、日テレとテレ東の数字は放送を梃子に積み上げた放送関連事業の成果だ。しかしフジの28%は放送事業が縮小した後に相対的に浮き上がった数字であり、起点が全く異なる。また、TBSの物販・ライフ（23%）とフジの不動産（32%）はともに放送外事業だが、それぞれが放送というメディア資産の梃子として機能しているかどうかで、長期的な企業価値への貢献は変わる。構成比の「量」ではなく、その「成り立ち」と「放送との連動性」を問うことが、この横並び比較の本質的な読み方だ。",
-      "question": "目標構成比を各局の宣言と現状から突き合わせると、数字の矛盾が浮かぶ。日テレは「2033年コンテンツ中核化」を掲げるが、現在の放送関連事業（コンテンツ・配信）30%を「中核」と呼べる50%超にするには、2033年まで年率約9%の複利成長が必要だ。テレ朝は放送依存率63%という5局最高水準にあるが、500億円の戦略投資はその63%を「意図的に下げていく」ための投資か、「放送を維持しながら放送関連事業を積み上げる」ための投資か——どちらを選ぶかで10年後の構成比は全く異なる。フジは「コンテンツカンパニー」を宣言しているが、現在のコンテンツ・配信28%は放送が崩壊した結果の相対的な拡大であり、2030年度に放送：放送関連事業：放送外事業の比率をどこに置くかの目標数値を持っているか。構成比の目標なき変革宣言は、方向性なき多角化と変わらない。"
+    "Comparative Insights": {
+      "badge": "Comparative Insights",
+      "title": "What the '5 Networks, 5 Strategies' Era Proves—Key Drivers for Navigating the Next 10 Years",
+      "desc": "A side-by-side comparison reveals the paradox of broadcast dependency: Fuji is the lowest (30%) while TV Asahi is the highest (63%). Yet TV Asahi maintains the most aligned transformation strategy while Fuji recorded an operating deficit. Low broadcast dependency is not inherently 'proof of transformation'—in Fuji's case, it resulted from a cumulative 10-year ad drop (-40.2%). Non-broadcast businesses (real estate, retail, tourism) buffered this decline, making understanding the underlying direction more crucial than surface ratios.<br><br>Outside traditional broadcasting, the 5 networks split into 3 strategic vectors: Broadcast-Related Expansion (Nippon TV, TV Tokyo, TBS), Owned Ecosystem Building (TV Asahi's Tokyo Dream Park & CRM), and Non-Broadcast Business Dependency (TBS's StylingLife and Fuji's Urban Development). While both TBS and Fuji rely on non-broadcast earnings, TBS is reshaping retail/real estate as 'broadcast leverage' (ROIC adoption), whereas Fuji uses real estate profits to fund IP investments.",
+      "question": "Measure transformation by 'Broadcast-Related Growth Rate' rather than 'Broadcast Dependency Ratio'\n→ Does a rising non-broadcast ratio stem from IP content growth or broadcast ad contraction?\n\nIdentify key collaboration areas that create industry-wide leverage across all 5 networks\n→ Digital ad capture (7%), global IP licensing, regulatory negotiations—can networks collaborate on shared infrastructure like TVer?\n\nAlign board members on target revenue composition ratios for 2035\n→ What is Nippon TV's target content ratio for 2033? Will TV Asahi maintain 63% broadcast share? Transformation without a target ratio risks directionless diversification."
     }
   }
 };
 
 </script>
-  <!-- インタラクティブJavaScriptロジック読み込み -->
   <script>
 /* ==========================================================================
-   テレビ局売上構成ダッシュボード インタラクティブロジック (ApexCharts Controller)
+   Commercial TV Networks Revenue Dashboard Interactive Controller (English)
    ========================================================================== */
 
-// 1. アプリケーションステート管理
-let currentStation = "5局合計";
-let graphMode = "value"; // 'value' (百万円) or 'percent' (100%構成比)
+// 1. Application State Management
+let currentStation = "Total 5 Networks";
+let graphMode = "value"; // 'value' (JPY Millions/Billions) or 'percent' (Share %)
 let activeTab = "tab-trends";
 
-// チャートオブジェクト保持用
+// Chart instances
 let trendChart = null;
 let comparisonChart = null;
 
-// 決算年度（X軸のラベル）
+// Fiscal Years (X-axis labels)
 const YEARS = [
-  "2015年3月期", "2016年3月期", "2017年3月期", "2018年3月期",
-  "2019年3月期", "2020年3月期", "2021年3月期", "2022年3月期",
-  "2023年3月期", "2024年3月期", "2025年3月期", "2026年3月期"
+  "FY2015", "FY2016", "FY2017", "FY2018",
+  "FY2019", "FY2020", "FY2021", "FY2022",
+  "FY2023", "FY2024", "FY2025", "FY2026"
 ];
 
 // ==========================================
-// 2. 凡例カテゴリ定義とカラーコード定義
+// 2. Legend & Category Definitions
 // ==========================================
 const CATEGORY_COLORS = {
-  "テレビ放送＞地上波、BS、CS、その他": "#1E3D7C",  // ネイビーブルー
-  "テレビ放送＞デジタル広告": "#1E3D7C",            // 斜線縞模様で上書きされますが、基準色
-  "コンテンツ・配信": "#2A9D8F",                    // エメラルド・ティール
-  "物販・ライフ": "#38BDF8",                        // スカイブルー
-  "ウェルネス": "#10B981",                          // 明るめグリーン
-  "不動産・その他": "#F59E0B",                      // イエローオレンジ
-  "その他": "#6B7280"                               // グレー
+  "TV Broadcasting > Terrestrial, BS, CS, etc.": "#1E3D7C",  // Navy Blue
+  "TV Broadcasting > Digital Ads": "#1E3D7C",                // Navy with hatched pattern
+  "Content & Streaming": "#2A9D8F",                          // Emerald Teal
+  "Merchandising & Lifestyle": "#38BDF8",                    // Sky Blue
+  "Wellness": "#10B981",                                    // Bright Green
+  "Real Estate & Others": "#F59E0B",                         // Yellow Orange
+  "Others": "#6B7280"                                       // Gray
 };
 
 const CATEGORIES_LIST = [
-  "テレビ放送＞地上波、BS、CS、その他",
-  "テレビ放送＞デジタル広告",
-  "コンテンツ・配信",
-  "物販・ライフ",
-  "ウェルネス",
-  "不動産・その他",
-  "その他"
+  "TV Broadcasting > Terrestrial, BS, CS, etc.",
+  "TV Broadcasting > Digital Ads",
+  "Content & Streaming",
+  "Merchandising & Lifestyle",
+  "Wellness",
+  "Real Estate & Others",
+  "Others"
 ];
 
-// 局別の特徴解説メッセージ (意図②用)
 let STATION_PROFILES = {};
 
 function initStationProfiles() {
   if (typeof TV_DATA !== "undefined" && TV_DATA.station_profiles) {
     STATION_PROFILES = TV_DATA.station_profiles;
   } else {
-    // フォールバック用の定義
     STATION_PROFILES = {
-      "5局合計": {
-        badge: "5局合計",
-        title: "テレビ業界全体の地殻変動：地上波広告の激減とコンテンツ・多角化への構造改革",
-        desc: "主要民放キー局5局の財務合計データです。12年間で、本業であるテレビ放送（地上波広告・番組販売等）の収益は確実に目減りしていますが、各社が知的財産（アニメやゲーム等のIP）、ライフスタイル（物販・通販）、および不動産賃貸・都市開発へとポートフォリオを広げることで、業界全体の連結営業収益（売上規模）は維持、あるいは緩やかに拡大させています。"
+      "Total 5 Networks": {
+        badge: "Total 5 Networks",
+        title: "Tectonic Shift in Media: Terrestrial Ad Contraction & Structural Pivot to Content",
+        desc: "Aggregate financial data for Japan's 5 key commercial TV networks over FY2015–FY2026."
       }
     };
   }
 }
 
 // ==========================================
-// 3. アプリケーション初期化
+// 3. Application Initialization
 // ==========================================
 window.onload = function() {
   try {
-    // グローバルデータ (TV_DATA) の存在を確認
     if (typeof TV_DATA === "undefined") {
-      throw new Error("TV_DATA is not loaded. Please make sure src/data.js is compiled.");
+      throw new Error("TV_DATA is not loaded. Please ensure src/data_en.js is included.");
     }
     
-    // インサイト解説を初期化
     initStationProfiles();
     
-    // 比較インサイトテキストの表示
-    if (STATION_PROFILES["比較インサイト"]) {
+    // Comparative Insights rendering
+    if (STATION_PROFILES["Comparative Insights"]) {
       const compTitleEl = document.getElementById("comp-insight-title");
       const compDescEl = document.getElementById("comp-insight-desc");
       const compQTextEl = document.getElementById("comp-insight-question");
       const compQContEl = document.getElementById("comp-insight-question-container");
       
-      if (compTitleEl) compTitleEl.innerText = STATION_PROFILES["比較インサイト"].title;
-      if (compDescEl) compDescEl.innerHTML = STATION_PROFILES["比較インサイト"].desc;
+      if (compTitleEl) compTitleEl.innerText = STATION_PROFILES["Comparative Insights"].title;
+      if (compDescEl) compDescEl.innerHTML = STATION_PROFILES["Comparative Insights"].desc;
       
       if (compQTextEl && compQContEl) {
-        if (STATION_PROFILES["比較インサイト"].question) {
-          compQTextEl.innerText = STATION_PROFILES["比較インサイト"].question;
+        if (STATION_PROFILES["Comparative Insights"].question) {
+          compQTextEl.innerText = STATION_PROFILES["Comparative Insights"].question;
           compQContEl.style.display = "block";
         } else {
           compQContEl.style.display = "none";
@@ -2635,7 +2629,7 @@ window.onload = function() {
       }
     }
     
-    // 初期テキストインサイト描画 (5局合計)
+    // Default text rendering (Total 5 Networks)
     if (STATION_PROFILES[currentStation]) {
       const profile = STATION_PROFILES[currentStation];
       const badgeEl = document.getElementById("insight-station-badge");
@@ -2657,7 +2651,6 @@ window.onload = function() {
       }
     }
     
-    // 初期チャートレンダリング
     updateTrendChart();
     updateComparisonChart();
   } catch (err) {
@@ -2666,38 +2659,34 @@ window.onload = function() {
 };
 
 // ==========================================
-// 4. タブ切り替えロジック
+// 4. Tab Switching Logic
 // ==========================================
 function switchTab(tabId) {
   activeTab = tabId;
   
-  // すべてのタブボタンとコンテンツを非アクティブにする
   document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.remove("active"));
   document.querySelectorAll(".tab-content").forEach(content => content.classList.remove("active"));
   
-  // クリックされたタブをアクティブにする
   const activeBtn = Array.from(document.querySelectorAll(".tab-btn")).find(btn => btn.getAttribute("onclick").includes(tabId));
   if (activeBtn) activeBtn.classList.add("active");
   
   document.getElementById(tabId).classList.add("active");
   
-  // 各チャートのリサイズ・再描画
   setTimeout(() => {
     window.dispatchEvent(new Event('resize'));
   }, 100);
 }
 
 // ==========================================
-// 5. タブ1: 積み上げ棒グラフ制御 (Trend Graph)
+// 5. Tab 1: Trend Stacked Bar Chart Controller
 // ==========================================
 function onStationChange() {
   currentStation = document.getElementById("station-select").value;
   
-  // 分析対象切り替え
-  const profile = STATION_PROFILES[currentStation];
-  document.getElementById("insight-station-badge").innerText = profile.badge;
-  document.getElementById("insight-title").innerText = profile.title;
-  document.getElementById("insight-desc").innerHTML = profile.desc;
+  const profile = STATION_PROFILES[currentStation] || {};
+  document.getElementById("insight-station-badge").innerText = profile.badge || currentStation;
+  document.getElementById("insight-title").innerText = profile.title || "";
+  document.getElementById("insight-desc").innerHTML = profile.desc || "";
   
   const qTextEl = document.getElementById("insight-question");
   const qContEl = document.getElementById("insight-question-container");
@@ -2710,8 +2699,7 @@ function onStationChange() {
     }
   }
   
-  // チャートタイトル更新
-  document.getElementById("chart-main-title").innerHTML = `<i data-lucide="bar-chart-horizontal"></i> ${currentStation} 年度別売上構成推移 (2015〜2026年3月期)`;
+  document.getElementById("chart-main-title").innerHTML = `<i data-lucide="bar-chart-horizontal"></i> ${currentStation}: Revenue Breakdown Trends (FY2015–FY2026)`;
   lucide.createIcons();
   
   updateTrendChart();
@@ -2727,15 +2715,16 @@ function setGraphMode(mode) {
 
 function updateTrendChart() {
   let records;
-  if (currentStation === "5局合計") {
-    const stations = ["日本テレビHD", "テレビ朝日HD", "TBS HD", "テレビ東京HD", "フジ・メディアHD"];
+  const stations = ["Nippon TV HD", "TV Asahi HD", "TBS HD", "TV Tokyo HD", "Fuji Media HD"];
+  
+  if (currentStation === "Total 5 Networks") {
     records = YEARS.map(year => {
       const mergedRec = { "決算期": year };
       stations.forEach(st => {
-        const stRecs = TV_DATA.station_details[st];
+        const stRecs = TV_DATA.station_details[st] || [];
         const rec = stRecs.find(r => r["決算期"] === year) || {};
         for (const [key, val] of Object.entries(rec)) {
-          if (key === "決算期") continue;
+          if (key === "決算期" || key === "sales") continue;
           if (typeof val === "number") {
             mergedRec[key] = (mergedRec[key] || 0) + val;
           }
@@ -2744,7 +2733,7 @@ function updateTrendChart() {
       return mergedRec;
     });
   } else {
-    records = TV_DATA.station_details[currentStation];
+    records = TV_DATA.station_details[currentStation] || [];
   }
   
   const series = CATEGORIES_LIST.map(category => {
@@ -2756,9 +2745,8 @@ function updateTrendChart() {
           if (key === "決算期" || key === "sales") continue;
           if (typeof val !== "number") continue;
           
-          let itemCat = "その他";
-          if (currentStation === "5局合計") {
-            const stations = ["日本テレビHD", "テレビ朝日HD", "TBS HD", "テレビ東京HD", "フジ・メディアHD"];
+          let itemCat = "Others";
+          if (currentStation === "Total 5 Networks") {
             for (const st of stations) {
               if (TV_DATA.item_classifications[st] && TV_DATA.item_classifications[st][key]) {
                 itemCat = TV_DATA.item_classifications[st][key];
@@ -2766,7 +2754,7 @@ function updateTrendChart() {
               }
             }
           } else {
-            itemCat = TV_DATA.item_classifications[currentStation][key] || "その他";
+            itemCat = (TV_DATA.item_classifications[currentStation] && TV_DATA.item_classifications[currentStation][key]) || "Others";
           }
           
           if (itemCat === category) {
@@ -2817,10 +2805,10 @@ function updateTrendChart() {
         if (graphMode === 'percent') {
           return val > 5 ? val.toFixed(0) + '%' : '';
         } else {
-          if (seriesName === 'テレビ放送＞地上波、BS、CS、その他' || seriesName === 'テレビ放送＞デジタル広告' || seriesName === 'コンテンツ・配信') {
-            const okuVal = val / 100;
-            if (okuVal >= 15) {
-              return okuVal.toFixed(0) + '億';
+          if (seriesName.includes('TV Broadcasting') || seriesName === 'Content & Streaming') {
+            const bilVal = val / 1000;
+            if (bilVal >= 15) {
+              return '¥' + bilVal.toFixed(0) + 'B';
             }
           }
           return '';
@@ -2841,7 +2829,7 @@ function updateTrendChart() {
       labels: {
         formatter: function(val) {
           if (graphMode === 'percent') return val.toFixed(0) + '%';
-          return (val / 100).toFixed(0) + '億円';
+          return '¥' + (val / 1000).toFixed(0) + 'B';
         }
       }
     },
@@ -2855,7 +2843,7 @@ function updateTrendChart() {
       y: {
         formatter: function(val) {
           if (graphMode === 'percent') return val.toFixed(1) + '%';
-          return (val / 100).toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' 億円';
+          return '¥' + (val / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Billion JPY';
         }
       }
     }
@@ -2869,17 +2857,17 @@ function updateTrendChart() {
 }
 
 // ==========================================
-// 6. タブ2: 各局特徴比較 (Comparison Graph)
+// 6. Tab 2: Cross-Network Comparison Graph
 // ==========================================
 function updateComparisonChart() {
-  const targetYear = "2026年3月期";
-  const stations = ["日本テレビHD", "テレビ朝日HD", "TBS HD", "テレビ東京HD", "フジ・メディアHD"];
+  const targetYear = "FY2026";
+  const stations = ["Nippon TV HD", "TV Asahi HD", "TBS HD", "TV Tokyo HD", "Fuji Media HD"];
   
   const series = CATEGORIES_LIST.map(category => {
     return {
       name: category,
       data: stations.map(station => {
-        const records = TV_DATA.station_details[station];
+        const records = TV_DATA.station_details[station] || [];
         const rec = records.find(r => r["決算期"] === targetYear) || {};
         
         let sum = 0;
@@ -2887,7 +2875,7 @@ function updateComparisonChart() {
           if (key === "決算期" || key === "sales") continue;
           if (typeof val !== "number") continue;
           
-          const itemCat = TV_DATA.item_classifications[station][key] || "その他";
+          const itemCat = (TV_DATA.item_classifications[station] && TV_DATA.item_classifications[station][key]) || "Others";
           if (itemCat === category) {
             sum += val;
           }
@@ -2955,7 +2943,7 @@ function updateComparisonChart() {
         formatter: function(val, opts) {
           const total = opts.w.globals.stackedSeriesTotals[opts.dataPointIndex];
           const pct = total > 0 ? ((val / total) * 100).toFixed(1) + '%' : '0%';
-          return (val / 100).toLocaleString(undefined, {minimumFractionDigits: 1, maximumFractionDigits: 1}) + ' 億円 (' + pct + ')';
+          return '¥' + (val / 1000).toLocaleString(undefined, {minimumFractionDigits: 2, maximumFractionDigits: 2}) + ' Billion JPY (' + pct + ')';
         }
       }
     }
@@ -2969,7 +2957,7 @@ function updateComparisonChart() {
 }
 
 // ==========================================
-// SVGパターンのカスタマイズ
+// SVG Pattern Customization
 // ==========================================
 function customizePattern() {
   const patterns = document.querySelectorAll('svg pattern');
@@ -3000,7 +2988,7 @@ function customizePattern() {
 }
 
 // ==========================================
-// グラフ画像保存機能
+// Save Chart Image Function
 // ==========================================
 function downloadChartImage(chartType, filename) {
   let chartObj = null;
@@ -3026,9 +3014,9 @@ function downloadChartImage(chartType, filename) {
         let titleText = "";
         if (chartType === 'trend') {
           const mainTitle = document.getElementById("chart-main-title");
-          titleText = mainTitle ? mainTitle.innerText : `${currentStation} 年度別売上構成推移 (2015〜2026年3月期)`;
+          titleText = mainTitle ? mainTitle.innerText : `${currentStation} Revenue Breakdown Trends (FY2015–FY2026)`;
         } else if (chartType === 'comparison') {
-          titleText = "主要テレビ局 最新売上構成比比較 (2026年3月期)";
+          titleText = "5 Key Commercial TV Networks: Revenue Breakdown Comparison (FY2026)";
         }
         
         var canvas = document.createElement('canvas');
@@ -3042,7 +3030,7 @@ function downloadChartImage(chartType, filename) {
         ctx.fillRect(0, 0, canvas.width, canvas.height);
         
         ctx.fillStyle = '#1E3A8A';
-        ctx.font = 'bold 20px "游ゴシック", "Segoe UI", sans-serif';
+        ctx.font = 'bold 18px "Segoe UI", Arial, sans-serif';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(titleText, canvas.width / 2, topMargin / 2 + 5);
@@ -3059,9 +3047,9 @@ function downloadChartImage(chartType, filename) {
         var a = document.createElement('a');
         a.href = canvas.toDataURL('image/png');
         
-        var stationName = currentStation;
+        var stationName = currentStation.replace(/ /g, '_');
         if (chartType === 'comparison') {
-          stationName = "キー局5局比較";
+          stationName = "5_Key_Networks";
         }
         
         var today = new Date().toISOString().slice(0, 10).replace(/-/g, '');
@@ -3096,7 +3084,6 @@ function downloadChartImage(chartType, filename) {
 
 </script>
   <script>
-    // Lucideアイコンの初期化
     lucide.createIcons();
   </script>
 </body>

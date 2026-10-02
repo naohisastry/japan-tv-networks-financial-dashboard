@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+.codex_tmp/
+test_output.json
+inspect_xlsx_output.txt
+items.json
+codex_rules.txt
+.DS_Store
+Thumbs.db
